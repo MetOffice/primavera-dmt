@@ -1,0 +1,36 @@
+"""
+Local Django settings for the primavera-dmt project
+
+Place any site specific settings in here and they will be imported into
+settings.py. This file is included in .gitignore and so it shouldn't be placed
+under revision control, protecting any site specific sensitive settings.
+
+local_settings.py.tmpl is included in the repository and suggests typical
+values for this file.
+"""
+
+from pathlib import Path
+
+
+# Sqlite3
+# From https://gist.github.com/defulmere/8b9695e415a44271061cc8e272f3c300
+# Get sqlite3 from pysqlite3-binary if the system sqlite3 is not recent enough
+# for the chosen Django version (and also uncomment the pysqlite3-binary line
+# in requirements.txt)
+
+# __import__('pysqlite3')
+# import sys
+# sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Database
+# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
