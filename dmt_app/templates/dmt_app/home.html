@@ -1,0 +1,19 @@
+{% extends "dmt_app/base.html" %}
+{% load static %}
+
+    {% block contents %}
+        <p>
+            This is the PRIMAVERA Data Management Tool (DMT) to track data files.
+        </p>
+
+        <p>To query the data that is available:</p>
+
+        <ul>
+          <li><a href="{% url 'data_sets' %}">Data Sets</a></li>
+          <li><a href="{% url 'data_files' %}">Data Files</a></li>
+        </ul>
+
+
+        <p>Please note that all times in this system are in UTC.</p>
+
+    {% endblock %}

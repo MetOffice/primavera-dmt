@@ -9,8 +9,8 @@ local_settings.py.tmpl is included in the repository and suggests typical
 values for this file.
 """
 
+import os
 from pathlib import Path
-
 
 # Sqlite3
 # From https://gist.github.com/defulmere/8b9695e415a44271061cc8e272f3c300
@@ -24,6 +24,10 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+
+STATIC_URL = '/static/'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
