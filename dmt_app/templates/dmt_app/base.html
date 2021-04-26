@@ -39,12 +39,12 @@
 
         <ul class="navbar-nav ml-auto">
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="navbardrop" data-toggle="dropdown">
+              <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="navbardrop" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Views
               </a>
-              <div class="dropdown-menu">
-                <a class="dropdown-item" href="{% url 'home' %}">Home</a>
+              <div class="dropdown-menu" aria-labelledby="navbardrop">
                 <a class="dropdown-item" href="{% url 'data_sets' %}">Data Sets</a>
+                <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="{% url 'data_files' %}">Data Files</a>
               </div>
             </li>
@@ -72,7 +72,7 @@
         </div>
     </div>
 
-    <script type="text/javascript" src="{% static 'ext/jquery-3.6.0.slim.min.js' %}" async></script>
-    <script type="text/javascript" src="{% static 'ext/bootstrap-4.6.0-dist/js/bootstrap.bundle.min.js' %}" async></script>
+    <script type="text/javascript" src="{% static 'ext/jquery-3.6.0.slim.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'ext/bootstrap-4.6.0-dist/js/bootstrap.bundle.min.js' %}"></script>
 </body>
 </html>
