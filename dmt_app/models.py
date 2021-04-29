@@ -16,6 +16,9 @@ class DataSet(models.Model):
     version = models.CharField(max_length=200, verbose_name='Version',
                                blank=True)
 
+    def __str__(self):
+        return f'{self.name} ({self.version})'
+
 
 class DataFile(models.Model):
     """
@@ -45,3 +48,5 @@ class DataFile(models.Model):
     dataset = models.ForeignKey(DataSet, blank=False,
                                 on_delete=CASCADE, verbose_name='Dataset')
 
+    def __str__(self):
+        return f'{self.name} (Directory: {self.directory})'

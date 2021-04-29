@@ -1,3 +1,6 @@
+"""
+Define tables to display dmt_app models using django_tables2.
+"""
 from django.template.defaultfilters import filesizeformat
 import django_tables2 as tables
 
