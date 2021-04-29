@@ -18,15 +18,11 @@
 
     <link href="{% static 'ext/bootstrap-4.6.0-dist/css/bootstrap.min.css' %}" rel="stylesheet">
     <link href="{% static 'css/base.css' %}" rel="stylesheet">
-
-<!--    <link rel="stylesheet" href="{% static 'django_tables2/themes/paleblue/css/screen.css' %}" />-->
-
+    <link rel="stylesheet" href="{% static 'django_tables2/themes/paleblue/css/screen.css' %}" />
 
     {% if page_title %}
         <title>{{ page_title }}</title>
     {% endif %}
-
-
 
 </head>
 <body>
@@ -39,7 +35,7 @@
 
         <ul class="navbar-nav ml-auto">
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="navbardrop" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <a class="nav-link dropdown-toggle" href="#" id="navbardrop" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Views
               </a>
               <div class="dropdown-menu" aria-labelledby="navbardrop">

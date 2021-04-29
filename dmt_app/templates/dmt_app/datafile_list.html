@@ -1,7 +1,11 @@
 {% extends "dmt_app/base.html" %}
 {% load static %}
+{% load render_table from django_tables2 %}
 
     {% block contents %}
+
     <p>Data Files...</p>
+
+    {% render_table table %}
 
     {% endblock %}
