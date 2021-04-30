@@ -39,9 +39,9 @@
                 Views
               </a>
               <div class="dropdown-menu" aria-labelledby="navbardrop">
-                <a class="dropdown-item" href="{% url 'data_sets' %}">Data Sets</a>
+                <a class="dropdown-item" href="{% url 'datasets' %}">Data Sets</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="{% url 'data_files' %}">Data Files</a>
+                <a class="dropdown-item" href="{% url 'datafiles' %}">Data Files</a>
               </div>
             </li>
           {% if request.user.is_authenticated %}

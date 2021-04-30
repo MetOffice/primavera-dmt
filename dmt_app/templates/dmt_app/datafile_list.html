@@ -7,14 +7,16 @@
         <p>
             {% if request.GET.dataset %}
                 These are the netCDF files for dataset ...
-                <pre>{{ request.GET.dataset_string }}</pre>
+                <div class="alert alert-dark" role="alert">
+                    {{ request.GET.dataset_string }}
+                </div>
             {% else %}
-                These are the netCDF files that we know about...
+                These are the data files that we know about...
             {% endif %}
         </p>
 
         <p>
-            <form class="form-inline" action="{% url 'data_files' %}" method="get">
+            <form class="form-inline" action="{% url 'datafiles' %}" method="get">
                 <div class="form-group">
                     <label class="sr-only" for="name">Name</label>
                     <input type="text" class="form-control  mb-2 mr-sm-2" name="name" id="name" placeholder="Name" {% if request.GET.name %} value="{{ request.GET.name }}" {% endif %} autofocus>
@@ -32,9 +34,9 @@
                 {% if request.GET.dataset %}
                     <input type="hidden" name="dataset" value="{{ request.GET.dataset }}">
                     <input type="hidden" name="dataset_string" value="{{ request.GET.dataset_string }}">
-                    <a class="btn btn-default" href="{% url 'data_files' %}?data_submission={{ request.GET.data_submission }}&data_submission_string={{ request.GET.data_submission_string }}">Clear</a>
+                    <a class="btn btn-primary mb-2 mr-sm-2" href="{% url 'datafiles' %}?dataset={{ request.GET.dataset }}&dataset_string={{ request.GET.dataset_string }}">Clear</a>
                 {% else %}
-                    <a class="btn btn-primary mb-2 mr-sm-2" href="{% url 'data_files' %}">Clear</a>
+                    <a class="btn btn-primary mb-2 mr-sm-2" href="{% url 'datafiles' %}">Clear</a>
                 {% endif %}
                     <button type="submit" class="btn btn-primary mb-2 mr-sm-2">Filter</button>
             </form>

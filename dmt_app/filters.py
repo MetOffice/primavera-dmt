@@ -3,10 +3,13 @@ Define filters to filter rows of dmt_app models using django_filters.
 """
 import django_filters
 
-from .models import DataFile
+from .models import DataFile, DataSet
 
 
 class DataFileFilter(django_filters.FilterSet):
+    """
+    Filter for dmt_app.models.DataFile
+    """
     class Meta:
         model = DataFile
         fields = ['name', 'directory', 'dataset', 'online']
@@ -24,4 +27,20 @@ class DataFileFilter(django_filters.FilterSet):
     def filter_online(self, queryset, name, value):
         if value:
             return queryset.filter(online=True)
-        return queryset
+        else:
+            return queryset
+
+
+class DataSetFilter(django_filters.FilterSet):
+    """
+    Filter for dmt_app.models.DataSet
+    """
+    class Meta:
+        model = DataSet
+        fields = ['name', 'version']
+
+    name = django_filters.CharFilter(field_name='name',
+                                     lookup_expr='icontains')
+
+    version = django_filters.CharFilter(field_name='version',
+                                        lookup_expr='icontains')

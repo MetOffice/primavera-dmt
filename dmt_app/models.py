@@ -14,10 +14,27 @@ class DataSet(models.Model):
 
     name = models.CharField(max_length=200, verbose_name='Name', blank=False)
     version = models.CharField(max_length=200, verbose_name='Version',
-                               blank=True)
+                               blank=True, null=True)
+
+    @property
+    def online_status(self):
+        """
+        Checks aggregation of online status of all DataFiles.
+        Returns one of: online, offline, partial
+        """
+        files_online = self.datafile_set.filter(online=True).count()
+        files_offline = self.datafile_set.filter(online=False).count()
+
+        if files_offline:
+            if files_online:
+                return 'partial'
+            else:
+                return 'offline'
+        else:
+            return 'online'
 
     def __str__(self):
-        return f'{self.name} ({self.version})'
+        return f'{self.name} ({self.version})' if self.version else self.name
 
 
 class DataFile(models.Model):
@@ -34,7 +51,7 @@ class DataFile(models.Model):
                                           verbose_name='Incoming directory',
                                           blank=False)
     directory = models.CharField(max_length=4096, verbose_name='Directory',
-                                 blank=True)
+                                 blank=True, null=True)
     size = models.BigIntegerField(verbose_name='File size')
 
     checksum_value = models.CharField(max_length=200, blank=False)
