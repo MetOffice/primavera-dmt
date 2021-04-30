@@ -18,8 +18,8 @@
                     <label class="sr-only" for="version">Version</label>
                     <input type="text" class="form-control mb-2 mr-sm-2" name="version" id="version" placeholder="Version" {% if request.GET.version %} value="{{ request.GET.version }}" {% endif %}>
                 </div>
-                    <a class="btn btn-primary mb-2 mr-sm-2" href="{% url 'datasets' %}">Clear</a>
-                    <button type="submit" class="btn btn-primary mb-2 mr-sm-2">Filter</button>
+                    <a class="btn btn-outline-dark mb-2 mr-sm-2" href="{% url 'datasets' %}">Clear</a>
+                    <button type="submit" class="btn btn-outline-dark mb-2 mr-sm-2">Filter</button>
             </form>
         </p>
 

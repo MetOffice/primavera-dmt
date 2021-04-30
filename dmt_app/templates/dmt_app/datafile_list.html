@@ -34,11 +34,11 @@
                 {% if request.GET.dataset %}
                     <input type="hidden" name="dataset" value="{{ request.GET.dataset }}">
                     <input type="hidden" name="dataset_string" value="{{ request.GET.dataset_string }}">
-                    <a class="btn btn-primary mb-2 mr-sm-2" href="{% url 'datafiles' %}?dataset={{ request.GET.dataset }}&dataset_string={{ request.GET.dataset_string }}">Clear</a>
+                    <a class="btn btn-outline-dark mb-2 mr-sm-2" href="{% url 'datafiles' %}?dataset={{ request.GET.dataset }}&dataset_string={{ request.GET.dataset_string }}">Clear</a>
                 {% else %}
-                    <a class="btn btn-primary mb-2 mr-sm-2" href="{% url 'datafiles' %}">Clear</a>
+                    <a class="btn btn-outline-dark mb-2 mr-sm-2" href="{% url 'datafiles' %}">Clear</a>
                 {% endif %}
-                    <button type="submit" class="btn btn-primary mb-2 mr-sm-2">Filter</button>
+                    <button type="submit" class="btn btn-outline-dark mb-2 mr-sm-2">Filter</button>
             </form>
         </p>
 
