@@ -2,18 +2,18 @@
 Common functions used throughout the project.
 """
 import os
-from subprocess import check_output, CalledProcessError
-
+import subprocess
 
 
 def list_files(directory, suffix='.nc'):
     """
     Return a list of all the files with the specified suffix in the submission
-    directory structure and sub-directories.
+    directory structure and subdirectories.
 
     :param str directory: The root directory of the submission
     :param str suffix: The suffix of the files of interest
     :returns: A list of absolute filepaths
+    :rtype: list
     """
     nc_files = []
 
@@ -28,6 +28,10 @@ def list_files(directory, suffix='.nc'):
     return nc_files
 
 
+def adler32(fpath):
+    return _checksum('adler32', fpath)
+
+
 def md5(fpath):
     return _checksum('md5sum', fpath)
 
@@ -36,29 +40,25 @@ def sha256(fpath):
     return _checksum('sha256sum', fpath)
 
 
-def adler32(fpath):
-    return _checksum('adler32', fpath)
-
-
 def _checksum(checksum_method, file_path):
     """
     Runs program `checksum_method` on `file_path` and returns the result or
     None if running the program was unsuccessful.
 
-    :param str command:
-    :param str file_path:
-    :return: the checksum or None if it cannot be calculated
+    :param str checksum_method: The name of the checksum executable to run
+    :param str file_path: The full path of teh file to check
+    :returns: the checksum or None if it cannot be calculated
+    :rtype: str
     """
-    try:
-        # shell=True is not a security risk here. The input has previously been
-        # checked and this is only called if file_path has been confirmed as
-        # being a valid file
-        # TODO convert to subprocess.run
-        ret_val = check_output("{} '{}'".format(checksum_method, file_path),
-                                shell=True).decode('utf-8')
-        # split on white space and return the first part
-        checksum = ret_val.split()[0]
-    except (CalledProcessError, OSError):
+    # TODO consider replacing these with a pure Python implementation
+    # although there could be no performance benefit
+    # (https://stackoverflow.com/a/21565932) and considerable testing
+    # could be required to satisfy us that the method is working
+    command = f"{checksum_method} '{file_path}'"
+    completed = subprocess.run(command, shell=True, stdout=subprocess.PIPE)
+    if completed.returncode != 0:
         checksum = None
+    else:
+        checksum = completed.stdout.split()[0]
 
     return checksum
