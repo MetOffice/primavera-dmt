@@ -21,7 +21,6 @@ class IngestedDataset(object):
     """
     # The attributes that are required in the class to fully describe a
     # data set
-    class_attributes = ['name', 'version', 'incoming_directory']
     django_attributes = ['name', 'version']
 
     def __init__(self, name=None, version=None, incoming_directory=None):
@@ -58,6 +57,7 @@ class IngestedDataset(object):
         :raises ValueError: if no files were found.
         """
         if only_netcdf:
+            # TODO replace with ilist_files
             found_files = list_files(self.incoming_directory)
         else:
             found_files = list_files(self.incoming_directory, '')
@@ -79,7 +79,7 @@ class IngestedDataset(object):
 
     def to_django_instance(self):
         """
-        Convert this object into a Django pdata_app.models.ObservationDataset
+        Convert this object into a Django dmt_app.models.Dataset
         instance of the same observations set. Instances of each file in the
         set are also created.
         """
@@ -87,20 +87,14 @@ class IngestedDataset(object):
             **{attr: getattr(self, attr) for attr in self.django_attributes}
         )
         for datafile_obj in self.datafiles:
-            # TODO add to_django_instance to file class
-            DataFile.objects.create(
-                dataset=django_set,
-                **{attr: getattr(datafile_obj, attr)
-                   for attr in datafile_obj.class_attributes}
-            )
+            datafile_obj.to_django_instance(django_set)
 
 
 class IngestedDatafile(object):
     """
     A class that represents a single ingested file.
     """
-    # The attributes that are used in the class to fully describe a
-    # data file
+    # The attributes that are used in this class to fully describe a data file
     class_attributes = ['name', 'incoming_directory', 'directory', 'online',
                         'size', 'checksum_value', 'checksum_type']
 
@@ -141,6 +135,20 @@ class IngestedDatafile(object):
         #     logger.debug('Getting additional netCDF metadata for {}'.
         #                  format(self.name))
         #     self._add_netcdf4_metadata()
+
+    def to_django_instance(self, dataset):
+        """
+        Convert this object into a Django dmt_app.models.Dataset
+        instance of the same observations set. Instances of each file in the
+        set are also created.
+
+        :param dmt_app.utils.ingestion.IngestedDataset dataset: The parent dataset.
+        """
+        DataFile.objects.create(
+            dataset=dataset,
+            **{attr: getattr(self, attr)
+               for attr in self.class_attributes}
+        )
 
     def _add_netcdf4_metadata(self):
         """

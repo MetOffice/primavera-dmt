@@ -15,6 +15,7 @@ def list_files(directory, suffix='.nc'):
     :returns: A list of absolute filepaths
     :rtype: list
     """
+    # TODO rewrite using Path objects
     nc_files = []
 
     dir_files = os.listdir(directory)
@@ -50,15 +51,11 @@ def _checksum(checksum_method, file_path):
     :returns: the checksum or None if it cannot be calculated
     :rtype: str
     """
-    # TODO consider replacing these with a pure Python implementation
-    # although there could be no performance benefit
-    # (https://stackoverflow.com/a/21565932) and considerable testing
-    # could be required to satisfy us that the method is working
     command = f"{checksum_method} '{file_path}'"
     completed = subprocess.run(command, shell=True, stdout=subprocess.PIPE)
     if completed.returncode != 0:
         checksum = None
     else:
-        checksum = completed.stdout.split()[0]
+        checksum = completed.stdout.decode('UTF-8').split()[0]
 
     return checksum

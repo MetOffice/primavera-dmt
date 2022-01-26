@@ -26,7 +26,7 @@ def parse_args():
     """
     Parse command-line arguments
     """
-    parser = argparse.ArgumentParser(description='Validate observation set')
+    parser = argparse.ArgumentParser(description='Ingest a dataset into the DMT')
     parser.add_argument('-l', '--log-level',
                         help='set logging level to one of debug, info, warn '
                              '(the default), or error')
