@@ -56,7 +56,7 @@ class DataSetTable(tables.Table):
         num_datafiles = record.datafile_set.count()
         url_query = urlencode({
             'dataset': record.id,
-            'dataset_string': str(record.name)
+            'dataset_string': f"{record.name} ({record.version})"
         })
         return format_html('<a href="{}?{}">{}</a>'.format(
             reverse('datafiles'),
