@@ -12,9 +12,21 @@ class DataSet(models.Model):
         unique_together = ('name', 'version')
         verbose_name = 'Dataset'
 
+    # Compulsory attributes
     name = models.CharField(max_length=200, verbose_name='Name', blank=False)
     version = models.CharField(max_length=200, verbose_name='Version',
                                blank=True, null=True)
+    # Additional optional attributes
+    url = models.URLField(verbose_name='URL', null=True, blank=True)
+    summary = models.CharField(max_length=4000, verbose_name='Summary',
+                               null=True, blank=True)
+    doi = models.CharField(max_length=200, verbose_name='DOI',
+                           null=True, blank=True)
+    reference = models.CharField(max_length=4000, verbose_name='Reference',
+                                 null=True, blank=True)
+    license = models.URLField(verbose_name='License', null=True, blank=True)
+    date_downloaded = models.DateTimeField(verbose_name='Date downloaded',
+                                           null=True, blank=True)
 
     @property
     def online_status(self):

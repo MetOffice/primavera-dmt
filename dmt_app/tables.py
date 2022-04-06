@@ -44,7 +44,8 @@ class DataSetTable(tables.Table):
         model = DataSet
         attrs = {'class': 'paleblue'}
         exclude = ('id',)
-        sequence = ['name', 'version', 'num_files', 'online_status']
+        sequence = ['name', 'version', 'num_files', 'online_status','summary',
+                    'url', 'doi','license', 'reference', 'date_downloaded']
         order_by = 'name'
 
     num_files = tables.Column(empty_values=(), verbose_name='# Data Files',
