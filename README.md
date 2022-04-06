@@ -43,6 +43,8 @@ If you want to contribute to primavera-dmt be sure to review the
 
 3. Django set-up and create databases:  
    ```
+   export DJANGO_SETTINGS_MODULE=dmt_site.settings
+   export PYTHONPATH=.
    django-admin makemigrations dmt_app
    django-admin migrate
    ```
