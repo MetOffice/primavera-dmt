@@ -13,7 +13,7 @@ from dmt_app.models import DataSet  # noqa
 def main():
     """main entry"""
     ds = DataSet.objects.get(name="COMORPH")
-    ds.doi = " 10.25921/w9va-q159"
+    ds.doi = "10.25921/w9va-q159"
     ds.reference = ("Joyce, R. J., J. E. Janowiak, P. A. Arkin, and P. Xie, "
                     "2004: CMORPH: A method that produces global precipitation "
                     "estimates from passive microwave and infrared data at "

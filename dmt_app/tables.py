@@ -1,6 +1,7 @@
 """
 Define tables to display dmt_app models using django_tables2.
 """
+import datetime
 from urllib.parse import urlencode
 
 from django.template.defaultfilters import filesizeformat
@@ -44,8 +45,8 @@ class DataSetTable(tables.Table):
         model = DataSet
         attrs = {'class': 'paleblue'}
         exclude = ('id',)
-        sequence = ['name', 'version', 'num_files', 'online_status','summary',
-                    'url', 'doi','license', 'reference', 'date_downloaded']
+        sequence = ['name', 'version', 'num_files', 'online_status', 'summary',
+                    'url', 'doi', 'license', 'reference', 'date_downloaded']
         order_by = 'name'
 
     num_files = tables.Column(empty_values=(), verbose_name='# Data Files',
@@ -63,3 +64,12 @@ class DataSetTable(tables.Table):
             url_query,
             num_datafiles
         ))
+
+    def render_date_downloaded(self, value):
+        if isinstance(value, datetime.datetime):
+            return value.strftime('%Y-%m-%d')
+        else:
+            return DEFAULT_VALUE
+
+    def render_doi(self, value):
+        return format_html(f'<a href="https://doi.org/{value}">{value}</a>')
