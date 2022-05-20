@@ -1,8 +1,10 @@
 from django.contrib.auth import (authenticate, login, logout)
 from django.shortcuts import render, redirect
+from rest_framework import permissions, renderers, viewsets
 
 from .filters import DataFileFilter, DataSetFilter
 from .models import DataFile, DataSet
+from .serializers import DataFileSerializer, DataSetSerializer
 from .tables import DataFileTable, DataSetTable
 from .utils.table_views import PagedFilteredTableView
 
@@ -34,3 +36,21 @@ def view_login(request):
 def view_logout(request):
     # logout(request)
     return redirect('home')
+
+
+class DataSetViewSet(viewsets.ModelViewSet):
+    """
+    Rest API viewset for datasets
+    """
+    queryset = DataSet.objects.all()
+    serializer_class = DataSetSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
+
+
+class DataFileViewSet(viewsets.ModelViewSet):
+    """
+    Rest API viewset for datafiles
+    """
+    queryset = DataFile.objects.all()
+    serializer_class = DataFileSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, )

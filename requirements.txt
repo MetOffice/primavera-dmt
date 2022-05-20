@@ -1,6 +1,7 @@
 Django
 django-filter
 django-tables2
+djangorestframework
 numpy
 netCDF4
 # Uncomment the next line if the system sqlite is not recent enough for Django

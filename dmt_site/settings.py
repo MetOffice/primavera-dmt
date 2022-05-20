@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_filters',
     'django_tables2',
-    'dmt_app.apps.DmtAppConfig'
+    'dmt_app.apps.DmtAppConfig',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
