@@ -11,7 +11,7 @@ class DataSetSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = DataSet
         fields = ('name', 'version', 'url', 'summary', 'doi', 'reference', 'license',
-                  'date_downloaded', 'datafiles')
+                  'date_downloaded', 'datafile_set')
 
 
 class DataFileSerializer(serializers.HyperlinkedModelSerializer):

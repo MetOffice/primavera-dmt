@@ -75,8 +75,7 @@ class DataFile(models.Model):
 
     # Foreign Key Relationships
     dataset = models.ForeignKey(DataSet, blank=False,
-                                on_delete=CASCADE, verbose_name='Dataset',
-                                related_name='datafiles')
+                                on_delete=CASCADE, verbose_name='Dataset')
 
     def __str__(self):
         return f'{self.name} (Directory: {self.directory})'
