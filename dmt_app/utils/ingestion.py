@@ -1,17 +1,29 @@
 """
 Various classes to ingest datasets into the DMT
 """
+from http.client import responses
 import logging
 import os
 
-
 from netCDF4 import Dataset
+import requests
 
-from dmt_app.models import DataSet, DataFile
 from dmt_app.utils.common import list_files, sha256
 
 
 logger = logging.getLogger(__name__)
+
+
+class APIQueryError(Exception):
+    def __init__(self, message, server_message=None):
+        """
+        A custom exception for when an API query fails.
+
+        :param str message: Default exception message.
+        :param str server_message: The error message returned from the server.
+        """
+        super().__init__(message)
+        self.server_message = server_message
 
 
 class IngestedDataset(object):
@@ -77,17 +89,51 @@ class IngestedDataset(object):
 
         logger.debug('{} files added'.format(len(self.datafiles)))
 
-    def to_django_instance(self):
+    def to_django_instance(self, base_url, username, password):
         """
-        Convert this object into a Django dmt_app.models.Dataset
+        Convert this object into a Django dmt_app.models.DataSet
         instance of the same observations set. Instances of each file in the
         set are also created.
+
+        :param str base_url: The URL of the root of the API on the server ending with
+            a forward slash.
+        :param str password: The password to use in the API call.
+        :param str username: The username to use in the API call.
         """
-        django_set = DataSet.objects.create(
-            **{attr: getattr(self, attr) for attr in self.django_attributes}
-        )
+        # Post the new dataset to the server
+        json_attributes = {'datafile_set': []}
+        for attr in self.django_attributes:
+            json_attributes[attr] = getattr(self, attr)
+
+        url = f'{base_url}datasets/'
+        response = requests.post(url, json=json_attributes, auth=(username, password))
+        if response.status_code != requests.codes.created:
+            msg = (f'{response.status_code} ({responses[response.status_code]}) '
+                   f'response from HTTP POST {response.url} {self.name} '
+                   f'{self.version}')
+            raise APIQueryError(msg, server_message=response.text)
+
+        # Get the URL of dataset in the API
+        query_params = {attr: getattr(self, attr) for attr in self.django_attributes}
+        query_url = f'{base_url}datasets/'
+        request = requests.get(query_url, params=query_params)
+        if request.status_code != requests.codes.ok:
+            msg = (f'{request.status_code} ({responses[request.status_code]}) '
+                   f'response from HTTP GET {request.url}')
+            raise APIQueryError(msg, server_message=response.text)
+        query_json = request.json()
+        if len(query_json) == 0:
+            raise APIQueryError(f'No datasets found, expecting one from HTTP GET '
+                                f'{request.url}')
+        elif len(query_json) > 1:
+            raise APIQueryError(f'{len(query_json)} datasets found, expecting one '
+                                f'from HTTP GET {request.url}')
+        else:
+            dataset_url = f'{base_url}datasets/{query_json[0]["id"]}/'
+
+        # Add the files to dataset
         for datafile_obj in self.datafiles:
-            datafile_obj.to_django_instance(django_set)
+            datafile_obj.to_django_instance(base_url, dataset_url, username, password)
 
 
 class IngestedDatafile(object):
@@ -136,19 +182,28 @@ class IngestedDatafile(object):
         #                  format(self.name))
         #     self._add_netcdf4_metadata()
 
-    def to_django_instance(self, dataset):
+    def to_django_instance(self, base_url, dataset, username, password):
         """
-        Convert this object into a Django dmt_app.models.Dataset
-        instance of the same observations set. Instances of each file in the
-        set are also created.
+        Convert this object into a Django dmt_app.models.DataFile
+        instance of the same file.
 
-        :param dmt_app.utils.ingestion.IngestedDataset dataset: The parent dataset.
+        :param str base_url: The URL of the root of the API on the server ending with
+            a forward slash.
+        :param str dataset: The URL of the parent dataset in the API.
+        :param str password: The password to use in the API call.
+        :param str username: The username to use in the API call.
         """
-        DataFile.objects.create(
-            dataset=dataset,
-            **{attr: getattr(self, attr)
-               for attr in self.class_attributes}
-        )
+        # Post the new dataset to the server
+        json_attributes = {attr: getattr(self, attr) for attr in self.class_attributes}
+        json_attributes['dataset'] = dataset
+
+        url = f'{base_url}datafiles/'
+        response = requests.post(url, json=json_attributes, auth=(username, password))
+        if response.status_code != requests.codes.created:
+            msg = (f'{response.status_code} ({responses[response.status_code]}) '
+                   f'response from HTTP POST {response.url} '
+                   f'{os.path.join(self.incoming_directory, self.name)}')
+            raise APIQueryError(msg, server_message=response.text)
 
     def _add_netcdf4_metadata(self):
         """

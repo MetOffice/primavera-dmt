@@ -119,4 +119,8 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "dmt_site", "static_src"),
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+}
+
 from .local_settings import *  # noqa

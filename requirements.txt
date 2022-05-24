@@ -4,5 +4,6 @@ django-tables2
 djangorestframework
 numpy
 netCDF4
+requests
 # Uncomment the next line if the system sqlite is not recent enough for Django
 # pysqlite3-binary

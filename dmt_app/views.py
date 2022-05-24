@@ -45,6 +45,7 @@ class DataSetViewSet(viewsets.ModelViewSet):
     queryset = DataSet.objects.all()
     serializer_class = DataSetSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
+    filterset_fields = ['name', 'version']
 
 
 class DataFileViewSet(viewsets.ModelViewSet):
@@ -54,3 +55,5 @@ class DataFileViewSet(viewsets.ModelViewSet):
     queryset = DataFile.objects.all()
     serializer_class = DataFileSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
+    filterset_fields = ['name', 'incoming_directory', 'directory', 'online',
+                        'dataset__id']

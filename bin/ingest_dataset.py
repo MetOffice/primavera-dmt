@@ -11,7 +11,7 @@ import sys
 import django
 django.setup()
 
-from dmt_app.utils.ingestion import IngestedDataset  # noqa
+from dmt_app.utils.ingestion import APIQueryError, IngestedDataset  # noqa
 
 
 __version__ = '0.1.0b1'
@@ -57,7 +57,16 @@ def main(args):
     except ValueError as exc:
         logger.error(exc.__str__())
         sys.exit(1)
-    dataset.to_django_instance()
+    url = 'http://127.0.0.1:8000/api/'
+    username = 'jseddon'
+    password = '95AbKtNsNxEV440q'
+    try:
+        dataset.to_django_instance(url, username, password)
+    except APIQueryError as exc:
+        logger.error(exc)
+        if exc.server_message:
+            logger.error(exc.server_message)
+        sys.exit(1)
 
 
 if __name__ == "__main__":
