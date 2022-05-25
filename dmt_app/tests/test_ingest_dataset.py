@@ -49,14 +49,13 @@ class TestDmtCredentials(TestCase):
                                 f'exist.', DmtCredentials, self.creds_filename)
 
     def test_symlink(self):
-        _fd, symlink_filename = tempfile.mkstemp()
+        _fd, symlink_filename = tempfile.mkstemp(suffix='.json')
         # mkstemp() creates a file so remove this so that the symlink can be created
         os.remove(symlink_filename)
-        os.rename(self.creds_filename, symlink_filename)
-        os.symlink(symlink_filename, self.creds_filename)
+        os.symlink(self.creds_filename, symlink_filename)
         self.assertRaisesRegexp(CredentialsFileError,
-                                f'Credentials file {self.creds_filename} is a '
-                                f'symbolic link.', DmtCredentials, self.creds_filename)
+                                f'Credentials file {symlink_filename} is a '
+                                f'symbolic link.', DmtCredentials, symlink_filename)
         os.remove(symlink_filename)
 
     def test_url(self):
