@@ -11,7 +11,8 @@ import sys
 import django
 django.setup()
 
-from dmt_app.utils.ingestion import APIQueryError, IngestedDataset  # noqa
+from dmt_app.utils.ingestion import (APIQueryError, CredentialsFileError,
+                                     DmtCredentials, IngestedDataset)  # noqa
 
 
 __version__ = '0.1.0b1'
@@ -20,6 +21,10 @@ DEFAULT_LOG_LEVEL = logging.WARNING
 DEFAULT_LOG_FORMAT = '%(levelname)s: %(message)s'
 
 logger = logging.getLogger(__name__)
+
+# The path to a users DMT settings file where their credentials and the API URL
+#  are stored
+DMT_SETTINGS_FILE = '~/.config/dmt/dmt.json'
 
 
 def parse_args():
@@ -48,6 +53,12 @@ def main(args):
     Main entry point
     """
     try:
+        credentials = DmtCredentials(DMT_SETTINGS_FILE)
+    except CredentialsFileError as exc:
+        logger.error(exc)
+        sys.exit(1)
+
+    try:
         dataset = IngestedDataset(args.name, args.dataset_version,
                                   args.directory)
         if args.all:
@@ -55,13 +66,12 @@ def main(args):
         else:
             dataset.add_files(only_netcdf=True)
     except ValueError as exc:
-        logger.error(exc.__str__())
+        logger.error(exc)
         sys.exit(1)
-    url = 'http://127.0.0.1:8000/api/'
-    username = 'jseddon'
-    password = '95AbKtNsNxEV440q'
+
     try:
-        dataset.to_django_instance(url, username, password)
+        dataset.to_django_instance(credentials.url, credentials.username,
+                                   credentials.password)
     except APIQueryError as exc:
         logger.error(exc)
         if exc.server_message:

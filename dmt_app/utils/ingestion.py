@@ -2,14 +2,15 @@
 Various classes to ingest datasets into the DMT
 """
 from http.client import responses
+import json
 import logging
 import os
+from pathlib import Path
 
 from netCDF4 import Dataset
 import requests
 
 from dmt_app.utils.common import list_files, sha256
-
 
 logger = logging.getLogger(__name__)
 
@@ -24,6 +25,66 @@ class APIQueryError(Exception):
         """
         super().__init__(message)
         self.server_message = server_message
+
+
+class CredentialsFileError(Exception):
+    """
+    Custom exception raised when there is a problem with a user's credentials file.
+    """
+    pass
+
+
+class DmtCredentials:
+    def __init__(self, settings_file):
+        """
+        Represent, check and access a user's credentials from their settings file. The
+        file must be a regular file with Unix permissions 400 (read-only to the user).
+
+        :param str settings_file: The path to the settings file.
+        """
+        self.path = Path(settings_file).expanduser()
+        self._check_credentials()
+        with open(self.path) as fh:
+            self._json = json.load(fh)
+
+    @property
+    def url(self):
+        """Return the URL from the file"""
+        return self._json['url']
+
+    @property
+    def username(self):
+        """Return the username from the file"""
+        return self._json['username']
+
+    @property
+    def password(self):
+        """Return the password from the file"""
+        return self._json['password']
+
+    def _check_credentials(self):
+        """
+        Check that the credentials file exists and are protected.
+
+        :raises CredentialsFileError: When there is a problem with a user's
+            credentials file.
+        """
+        if not self.path.exists():
+            raise CredentialsFileError(f'Credentials file {self.path} does not exist.')
+        if self.path.is_symlink():
+            raise CredentialsFileError(f'Credentials file {self.path} is a symbolic '
+                                       f'link.')
+        if not self.path.is_file():
+            raise CredentialsFileError(f'Credentials file {self.path} is not a file.')
+
+        mask_3_bytes = 0o777
+        permissions_bytes = self.path.stat().st_mode & mask_3_bytes
+        user_read_only = 0o400
+        if not permissions_bytes == user_read_only:
+            msg = (f'Credentials file {self.path} has permissions '
+                   f'{oct(permissions_bytes)[-3:]} but must be '
+                   f'{oct(user_read_only)[-3:]}')
+            raise CredentialsFileError(msg)
 
 
 class IngestedDataset(object):
