@@ -7,3 +7,6 @@ netCDF4
 requests
 # Uncomment the next line if the system sqlite is not recent enough for Django
 # pysqlite3-binary
+# Uncomment the following lines if you would like to be able to build the documentation
+# sphinx
+# sphinx-rtd-theme

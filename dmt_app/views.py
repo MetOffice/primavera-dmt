@@ -1,6 +1,5 @@
-from django.contrib.auth import (authenticate, login, logout)
-from django.shortcuts import render, redirect
-from rest_framework import permissions, renderers, viewsets
+from django.shortcuts import render
+from rest_framework import permissions, viewsets
 
 from .filters import DataFileFilter, DataSetFilter
 from .models import DataFile, DataSet
@@ -25,17 +24,7 @@ class DataSetList(PagedFilteredTableView):
 
 def view_home(request):
     return render(request, 'dmt_app/home.html',
-                  {'request': request, 'page_title': 'PRIMAVERA DMT'})
-
-
-def view_login(request):
-    return render(request, 'dmt_app/login.html',
-                  {'request': request, 'page_title': 'Login'})
-
-
-def view_logout(request):
-    # logout(request)
-    return redirect('home')
+                  {'request': request, 'page_title': 'DMT'})
 
 
 class DataSetViewSet(viewsets.ModelViewSet):

@@ -14,7 +14,5 @@ urlpatterns = [
     path('datasets/', views.DataSetList.as_view(), name='datasets'),
     path('api/', include(router.urls)),
     path('api/api-auth/', include('rest_framework.urls')),
-    path('login/', views.view_login, name='login'),
-    path('logout/', views.view_logout, name='logout'),
     path('', views.view_home, name='home'),
 ]
