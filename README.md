@@ -18,8 +18,10 @@ If you want to contribute to primavera-dmt be sure to review the
    django  
    django-filter  
    django-tables2
+   djangorestframework
    numpy
-   netCDF4  
+   netCDF4
+   requests
    ```  
    
    For example in a Python virtual environment:
