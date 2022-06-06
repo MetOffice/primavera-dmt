@@ -1,0 +1,34 @@
+name: pytest
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+#        python-version: ['3.6.8', '3.7', '3.8', '3.9', '3.10']
+        python-version: ['3.7']
+        django-version: ['3.2', '4.0']
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        sed -i s/^Django$/Django\=${{ matrix.django-version }}/g requirements.txt
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    - name: Configure Django
+      run: |
+        export DJANGO_SETTINGS_MODULE=dmt_site.settings
+        cp dmt_site/local_settings.py.tmpl dmt_site/local_settings.py
+        django-admin makemigrations dmt_app
+        django-admin migrate
+    - name: Run Django tests
+      run: |
+        django-admin test
