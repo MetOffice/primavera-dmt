@@ -38,13 +38,13 @@ class TestDmtCredentials(TestCase):
 
     def test_permissions_user_write(self):
         os.chmod(self.creds_filename, stat.S_IRUSR | stat.S_IWUSR)
-        self.assertRaisesRegexp(CredentialsFileError,
+        self.assertRaisesRegex(CredentialsFileError,
                                 'has permissions 600 but must be 400', DmtCredentials,
                                 self.creds_filename)
 
     def test_not_exist(self):
         os.remove(self.creds_filename)
-        self.assertRaisesRegexp(CredentialsFileError,
+        self.assertRaisesRegex(CredentialsFileError,
                                 f'Credentials file {self.creds_filename} does not '
                                 f'exist.', DmtCredentials, self.creds_filename)
 
@@ -53,7 +53,7 @@ class TestDmtCredentials(TestCase):
         # mkstemp() creates a file so remove this so that the symlink can be created
         os.remove(symlink_filename)
         os.symlink(self.creds_filename, symlink_filename)
-        self.assertRaisesRegexp(CredentialsFileError,
+        self.assertRaisesRegex(CredentialsFileError,
                                 f'Credentials file {symlink_filename} is a '
                                 f'symbolic link.', DmtCredentials, symlink_filename)
         os.remove(symlink_filename)
