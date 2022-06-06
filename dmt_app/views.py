@@ -1,5 +1,7 @@
 from django.shortcuts import render
+from django.conf import settings
 from rest_framework import permissions, viewsets
+from rest_framework.pagination import PageNumberPagination
 
 from .filters import DataFileFilter, DataSetFilter
 from .models import DataFile, DataSet
@@ -27,12 +29,19 @@ def view_home(request):
                   {'request': request, 'page_title': 'DMT'})
 
 
+class SetPagination(PageNumberPagination):
+    page_size = settings.REST_PAGE_SIZE
+    page_size_query_param = 'page_size'
+    max_page_size = settings.REST_MAX_PAGE_SIZE
+
+
 class DataSetViewSet(viewsets.ModelViewSet):
     """
     Rest API viewset for datasets
     """
     queryset = DataSet.objects.all()
     serializer_class = DataSetSerializer
+    pagination_class = SetPagination
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
     filterset_fields = ['name', 'version']
 
@@ -46,6 +55,7 @@ class DataFileViewSet(viewsets.ModelViewSet):
     """
     queryset = DataFile.objects.all()
     serializer_class = DataFileSerializer
+    pagination_class = SetPagination
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
     filterset_fields = ['name', 'incoming_directory', 'directory', 'online',
                         'dataset__id']

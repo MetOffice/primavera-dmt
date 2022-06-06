@@ -15,6 +15,7 @@ https://github.com/PRIMAVERA-H2020/primavera-dmt.
 
    Installing
    Developing
+   API
    Contributing
    License
 
