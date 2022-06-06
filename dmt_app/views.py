@@ -36,6 +36,9 @@ class DataSetViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
     filterset_fields = ['name', 'version']
 
+    def perform_create(self, serializer):
+        serializer.save(creator=self.request.user.username)
+
 
 class DataFileViewSet(viewsets.ModelViewSet):
     """

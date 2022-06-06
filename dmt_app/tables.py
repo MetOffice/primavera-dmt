@@ -44,7 +44,7 @@ class DataSetTable(tables.Table):
     class Meta:
         model = DataSet
         attrs = {'class': 'paleblue'}
-        exclude = ('id',)
+        exclude = ('id', 'creator')
         sequence = ['name', 'version', 'num_files', 'online_status', 'summary',
                     'url', 'doi', 'license', 'reference', 'date_downloaded']
         order_by = 'name'

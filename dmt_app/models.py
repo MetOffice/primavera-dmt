@@ -27,6 +27,8 @@ class DataSet(models.Model):
     license = models.URLField(verbose_name='License', null=True, blank=True)
     date_downloaded = models.DateTimeField(verbose_name='Date downloaded',
                                            null=True, blank=True)
+    creator = models.CharField(max_length=100, verbose_name='Creator',
+                               null=True, blank=True)
 
     @property
     def online_status(self):
