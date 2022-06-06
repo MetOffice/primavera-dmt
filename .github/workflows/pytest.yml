@@ -26,6 +26,7 @@ jobs:
     - name: Configure Django
       run: |
         export DJANGO_SETTINGS_MODULE=dmt_site.settings
+        export PYTHONPATH=.
         cp dmt_site/local_settings.py.tmpl dmt_site/local_settings.py
         django-admin makemigrations dmt_app
         django-admin migrate
