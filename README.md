@@ -15,6 +15,7 @@ If you want to contribute to primavera-dmt be sure to review the
 
 1. Load a Conda or virtualenv environment containing:   
    ```  
+   argon2-cffi
    django  
    django-filter  
    django-tables2

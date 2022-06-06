@@ -1,3 +1,4 @@
+argon2-cffi
 Django
 django-filter
 django-tables2
