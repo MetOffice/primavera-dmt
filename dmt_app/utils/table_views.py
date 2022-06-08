@@ -16,7 +16,7 @@ from django_tables2 import SingleTableView
 
 class PagedFilteredTableView(SingleTableView):
     filter_class = None
-    context_filter_name = 'filter'
+    context_filter_name = "filter"
     page_title = None
 
     def get_queryset(self, **kwargs):
@@ -27,5 +27,5 @@ class PagedFilteredTableView(SingleTableView):
     def get_context_data(self, **kwargs):
         context = super(PagedFilteredTableView, self).get_context_data()
         context[self.context_filter_name] = self.filter
-        context['page_title'] = self.page_title
+        context["page_title"] = self.page_title
         return context

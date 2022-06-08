@@ -16,19 +16,18 @@ class DataFileFilter(django_filters.FilterSet):
     """
     Filter for dmt_app.models.DataFile
     """
+
     class Meta:
         model = DataFile
-        fields = ['name', 'directory', 'dataset', 'online']
+        fields = ["name", "directory", "dataset", "online"]
 
-    name = django_filters.CharFilter(field_name='name',
-                                     lookup_expr='icontains')
+    name = django_filters.CharFilter(field_name="name", lookup_expr="icontains")
 
-    directory = django_filters.CharFilter(field_name='directory',
-                                          lookup_expr='icontains')
-
-    dataset = django_filters.NumberFilter(
-        field_name='dataset__id'
+    directory = django_filters.CharFilter(
+        field_name="directory", lookup_expr="icontains"
     )
+
+    dataset = django_filters.NumberFilter(field_name="dataset__id")
 
     def filter_online(self, queryset, name, value):
         if value:
@@ -41,12 +40,11 @@ class DataSetFilter(django_filters.FilterSet):
     """
     Filter for dmt_app.models.DataSet
     """
+
     class Meta:
         model = DataSet
-        fields = ['name', 'version']
+        fields = ["name", "version"]
 
-    name = django_filters.CharFilter(field_name='name',
-                                     lookup_expr='icontains')
+    name = django_filters.CharFilter(field_name="name", lookup_expr="icontains")
 
-    version = django_filters.CharFilter(field_name='version',
-                                        lookup_expr='icontains')
+    version = django_filters.CharFilter(field_name="version", lookup_expr="icontains")

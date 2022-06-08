@@ -11,7 +11,7 @@ import os
 import subprocess
 
 
-def list_files(directory, suffix='.nc'):
+def list_files(directory, suffix=".nc"):
     """
     Return a list of all the files with the specified suffix in the submission
     directory structure and subdirectories.
@@ -36,15 +36,15 @@ def list_files(directory, suffix='.nc'):
 
 
 def adler32(fpath):
-    return _checksum('adler32', fpath)
+    return _checksum("adler32", fpath)
 
 
 def md5(fpath):
-    return _checksum('md5sum', fpath)
+    return _checksum("md5sum", fpath)
 
 
 def sha256(fpath):
-    return _checksum('sha256sum', fpath)
+    return _checksum("sha256sum", fpath)
 
 
 def _checksum(checksum_method, file_path):
@@ -62,6 +62,6 @@ def _checksum(checksum_method, file_path):
     if completed.returncode != 0:
         checksum = None
     else:
-        checksum = completed.stdout.decode('UTF-8').split()[0]
+        checksum = completed.stdout.decode("UTF-8").split()[0]
 
     return checksum

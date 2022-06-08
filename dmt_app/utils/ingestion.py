@@ -37,6 +37,7 @@ class CredentialsFileError(Exception):
     """
     Custom exception raised when there is a problem with a user's credentials file.
     """
+
     pass
 
 
@@ -56,17 +57,17 @@ class DmtCredentials:
     @property
     def url(self):
         """Return the URL from the file"""
-        return self._json['url']
+        return self._json["url"]
 
     @property
     def username(self):
         """Return the username from the file"""
-        return self._json['username']
+        return self._json["username"]
 
     @property
     def password(self):
         """Return the password from the file"""
-        return self._json['password']
+        return self._json["password"]
 
     def _check_credentials(self):
         """
@@ -76,20 +77,23 @@ class DmtCredentials:
             credentials file.
         """
         if not self.path.exists():
-            raise CredentialsFileError(f'Credentials file {self.path} does not exist.')
+            raise CredentialsFileError(f"Credentials file {self.path} does not exist.")
         if self.path.is_symlink():
-            raise CredentialsFileError(f'Credentials file {self.path} is a symbolic '
-                                       f'link.')
+            raise CredentialsFileError(
+                f"Credentials file {self.path} is a symbolic link."
+            )
         if not self.path.is_file():
-            raise CredentialsFileError(f'Credentials file {self.path} is not a file.')
+            raise CredentialsFileError(f"Credentials file {self.path} is not a file.")
 
         mask_3_bytes = 0o777
         permissions_bytes = self.path.stat().st_mode & mask_3_bytes
         user_read_only = 0o400
         if not permissions_bytes == user_read_only:
-            msg = (f'Credentials file {self.path} has permissions '
-                   f'{oct(permissions_bytes)[-3:]} but must be '
-                   f'{oct(user_read_only)[-3:]}')
+            msg = (
+                f"Credentials file {self.path} has permissions "
+                f"{oct(permissions_bytes)[-3:]} but must be "
+                f"{oct(user_read_only)[-3:]}"
+            )
             raise CredentialsFileError(msg)
 
 
@@ -98,9 +102,10 @@ class IngestedDataset(object):
     An ingested data set that can have files added to it and can then be added
     to the database.
     """
+
     # The attributes that are required in the class to fully describe a
     # data set
-    django_attributes = ['name', 'version']
+    django_attributes = ["name", "version"]
 
     def __init__(self, name=None, version=None, incoming_directory=None):
         """
@@ -113,11 +118,11 @@ class IngestedDataset(object):
         :raises ValueError: if the path specified is not a valid directory.
         """
         if not os.path.exists(incoming_directory):
-            msg = f'Directory does not exist: {incoming_directory}'
+            msg = f"Directory does not exist: {incoming_directory}"
             raise ValueError(msg)
 
         if not os.path.isdir(incoming_directory):
-            msg = f'Path is not a directory: {incoming_directory}'
+            msg = f"Path is not a directory: {incoming_directory}"
             raise ValueError(msg)
 
         self.name = name
@@ -139,22 +144,24 @@ class IngestedDataset(object):
             # TODO replace with ilist_files
             found_files = list_files(self.incoming_directory)
         else:
-            found_files = list_files(self.incoming_directory, '')
+            found_files = list_files(self.incoming_directory, "")
 
         if not found_files:
-            msg = ('No files found in directory or its subdirectories '
-                   '{}'.format(self.incoming_directory))
+            msg = "No files found in directory or its subdirectories {}".format(
+                self.incoming_directory
+            )
             raise ValueError(msg)
 
-        logger.debug('{} files identified'.format(len(found_files)))
+        logger.debug("{} files identified".format(len(found_files)))
 
         for found_file in found_files:
-            data_file = IngestedDatafile(os.path.basename(found_file),
-                                         os.path.dirname(found_file))
+            data_file = IngestedDatafile(
+                os.path.basename(found_file), os.path.dirname(found_file)
+            )
             data_file.add_metadata()
             self.datafiles.append(data_file)
 
-        logger.debug('{} files added'.format(len(self.datafiles)))
+        logger.debug("{} files added".format(len(self.datafiles)))
 
     def to_django_instance(self, base_url, username, password):
         """
@@ -168,33 +175,40 @@ class IngestedDataset(object):
         :param str username: The username to use in the API call.
         """
         # Post the new dataset to the server
-        json_attributes = {'datafile_set': []}
+        json_attributes = {"datafile_set": []}
         for attr in self.django_attributes:
             json_attributes[attr] = getattr(self, attr)
 
-        url = f'{base_url}datasets/'
+        url = f"{base_url}datasets/"
         response = requests.post(url, json=json_attributes, auth=(username, password))
         if response.status_code != requests.codes.created:
-            msg = (f'{response.status_code} ({responses[response.status_code]}) '
-                   f'response from HTTP POST {response.url} {self.name} '
-                   f'{self.version}')
+            msg = (
+                f"{response.status_code} ({responses[response.status_code]}) "
+                f"response from HTTP POST {response.url} {self.name} "
+                f"{self.version}"
+            )
             raise APIQueryError(msg, server_message=response.text)
 
         # Get the URL of dataset in the API
         query_params = {attr: getattr(self, attr) for attr in self.django_attributes}
-        query_url = f'{base_url}datasets/'
+        query_url = f"{base_url}datasets/"
         request = requests.get(query_url, params=query_params)
         if request.status_code != requests.codes.ok:
-            msg = (f'{request.status_code} ({responses[request.status_code]}) '
-                   f'response from HTTP GET {request.url}')
+            msg = (
+                f"{request.status_code} ({responses[request.status_code]}) "
+                f"response from HTTP GET {request.url}"
+            )
             raise APIQueryError(msg, server_message=response.text)
         query_json = request.json()
         if len(query_json) == 0:
-            raise APIQueryError(f'No datasets found, expecting one from HTTP GET '
-                                f'{request.url}')
+            raise APIQueryError(
+                f"No datasets found, expecting one from HTTP GET {request.url}"
+            )
         elif len(query_json) > 1:
-            raise APIQueryError(f'{len(query_json)} datasets found, expecting one '
-                                f'from HTTP GET {request.url}')
+            raise APIQueryError(
+                f"{len(query_json)} datasets found, expecting one "
+                f"from HTTP GET {request.url}"
+            )
         else:
             dataset_url = f'{base_url}datasets/{query_json[0]["id"]}/'
 
@@ -207,9 +221,17 @@ class IngestedDatafile(object):
     """
     A class that represents a single ingested file.
     """
+
     # The attributes that are used in this class to fully describe a data file
-    class_attributes = ['name', 'incoming_directory', 'directory', 'online',
-                        'size', 'checksum_value', 'checksum_type']
+    class_attributes = [
+        "name",
+        "incoming_directory",
+        "directory",
+        "online",
+        "size",
+        "checksum_value",
+        "checksum_type",
+    ]
 
     def __init__(self, name, incoming_directory):
         """
@@ -231,11 +253,11 @@ class IngestedDatafile(object):
         """
         Load a file and gather as much metadata from it as possible.
         """
-        logger.debug('Getting metadata for {}'.format(self.name))
+        logger.debug("Getting metadata for {}".format(self.name))
         filepath = os.path.join(self.directory, self.name)
         self.size = os.path.getsize(filepath)
         self.checksum_value = sha256(filepath)
-        self.checksum_type = 'SHA256'
+        self.checksum_type = "SHA256"
         # if '_' in self.name:
         #     freq_string = self.name.split('_')[1]
         #     for freq in ['yr', 'mon', 'day', '6hr', '3hr', '1hr']:
@@ -262,25 +284,27 @@ class IngestedDatafile(object):
         """
         # Post the new dataset to the server
         json_attributes = {attr: getattr(self, attr) for attr in self.class_attributes}
-        json_attributes['dataset'] = dataset
+        json_attributes["dataset"] = dataset
 
-        url = f'{base_url}datafiles/'
+        url = f"{base_url}datafiles/"
         response = requests.post(url, json=json_attributes, auth=(username, password))
         if response.status_code != requests.codes.created:
-            msg = (f'{response.status_code} ({responses[response.status_code]}) '
-                   f'response from HTTP POST {response.url} '
-                   f'{os.path.join(self.incoming_directory, self.name)}')
+            msg = (
+                f"{response.status_code} ({responses[response.status_code]}) "
+                f"response from HTTP POST {response.url} "
+                f"{os.path.join(self.incoming_directory, self.name)}"
+            )
             raise APIQueryError(msg, server_message=response.text)
 
     def _add_netcdf4_metadata(self):
         """
         Get as much internal metadata as possible using the netCDF4 library.
         """
-        logger.debug('Getting metadata using netCDF4 for {}'.format(self.name))
+        logger.debug("Getting metadata using netCDF4 for {}".format(self.name))
         filepath = os.path.join(self.directory, self.name)
         with Dataset(filepath) as rootgrp:
-            if 'time' in rootgrp.dimensions:
-                time_dim = rootgrp['time']
+            if "time" in rootgrp.dimensions:
+                time_dim = rootgrp["time"]
                 self.time_units = time_dim.units
                 self.calendar = time_dim.calendar
                 self.start_time = float(time_dim[:].min())
@@ -288,15 +312,16 @@ class IngestedDatafile(object):
 
             for variable in rootgrp.variables:
                 if variable not in rootgrp.dimensions:
-                    for var_type in ['var_name', 'long_name', 'standard_name',
-                                     'units']:
+                    for var_type in ["var_name", "long_name", "standard_name", "units"]:
                         if var_type in rootgrp[variable].ncattrs():
                             var_value = rootgrp[variable].getncattr(var_type)
-                            if var_type == 'units':
+                            if var_type == "units":
                                 var_value = str(var_value)
                             if not getattr(self, var_type):
                                 setattr(self, var_type, var_value)
                             else:
-                                setattr(self, var_type,
-                                        getattr(self, var_type) + ', ' +
-                                        var_value)
+                                setattr(
+                                    self,
+                                    var_type,
+                                    getattr(self, var_type) + ", " + var_value,
+                                )
