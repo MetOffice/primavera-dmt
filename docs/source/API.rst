@@ -1,6 +1,6 @@
-===
-API
-===
+===========
+RESTful API
+===========
 
 The DMT includes a RESTful API to allow programmatic access to the datasets and files in
 the DMT. By default the API is available at ``/api/``. The API includes a web browsable

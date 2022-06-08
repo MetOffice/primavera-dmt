@@ -1,3 +1,9 @@
+# (C) Crown Copyright, Met Office. All rights reserved.
+#
+# This file is part of cube_helper and is released under the
+# BSD 3-Clause license.
+# See LICENSE in the root of the repository for full licensing details.
+
 # Configuration file for the Sphinx documentation builder.
 #
 # This file only contains a selection of the most common options. For a full
