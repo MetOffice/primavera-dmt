@@ -200,17 +200,18 @@ class IngestedDataset(object):
             )
             raise APIQueryError(msg, server_message=response.text)
         query_json = request.json()
-        if len(query_json) == 0:
+        num_results = len(query_json["results"])
+        if num_results == 0:
             raise APIQueryError(
                 f"No datasets found, expecting one from HTTP GET {request.url}"
             )
-        elif len(query_json) > 1:
+        elif num_results > 1:
             raise APIQueryError(
-                f"{len(query_json)} datasets found, expecting one "
+                f"{num_results} datasets found, expecting one "
                 f"from HTTP GET {request.url}"
             )
         else:
-            dataset_url = f'{base_url}datasets/{query_json[0]["id"]}/'
+            dataset_url = f'{base_url}datasets/{query_json["results"][0]["id"]}/'
 
         # Add the files to dataset
         for datafile_obj in self.datafiles:
