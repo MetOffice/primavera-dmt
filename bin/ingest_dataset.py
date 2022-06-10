@@ -19,12 +19,12 @@ import django
 
 django.setup()
 
-from dmt_app.utils.ingestion import (
+from dmt_app.utils.ingestion import (  # noqa
     APIQueryError,
     CredentialsFileError,
     DmtCredentials,
     IngestedDataset,
-)  # noqa
+)
 
 
 __version__ = "0.1.0b1"

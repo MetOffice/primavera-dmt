@@ -9,6 +9,7 @@ test_ingest_dataset.py
 
 Unit tests for bin/ingest_dataset.py the CLI software in add datasets to the DMT
 """
+import ast
 import os
 import stat
 import tempfile
@@ -41,7 +42,7 @@ class TestDmtCredentials(TestCase):
 
     def test_load(self):
         creds = DmtCredentials(self.creds_filename)
-        self.assertEqual(creds._json, eval(self.creds_text))
+        self.assertEqual(creds._json, ast.literal_eval(self.creds_text))
 
     def test_permissions_user_write(self):
         os.chmod(self.creds_filename, stat.S_IRUSR | stat.S_IWUSR)

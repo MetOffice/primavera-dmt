@@ -8,7 +8,7 @@
 Common functions used throughout the project.
 """
 import os
-import subprocess
+import subprocess  # nosec B404
 
 
 def list_files(directory, suffix=".nc"):
@@ -57,8 +57,8 @@ def _checksum(checksum_method, file_path):
     :returns: the checksum or None if it cannot be calculated
     :rtype: str
     """
-    command = f"{checksum_method} '{file_path}'"
-    completed = subprocess.run(command, shell=True, stdout=subprocess.PIPE)
+    command = [checksum_method, file_path]
+    completed = subprocess.run(command, stdout=subprocess.PIPE)  # nosec B603
     if completed.returncode != 0:
         checksum = None
     else:
