@@ -79,9 +79,9 @@ def _checksum(checksum_method, file_path):
     :rtype: str
     """
     command = [checksum_method, file_path]
-    completed = subprocess.run(
+    completed = subprocess.run(  # nosec B603
         command, check=False, stdout=subprocess.PIPE
-    )  # nosec B603
+    )
     if completed.returncode != 0:
         checksum = None
     else:
