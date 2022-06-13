@@ -4,6 +4,8 @@
 # BSD 3-Clause license.
 # See LICENSE in the root of the repository for full licensing details.
 
+# pylint: disable=missing-class-docstring
+
 """
 Various classes to ingest datasets into the DMT
 """
@@ -13,7 +15,7 @@ import logging
 import os
 from pathlib import Path
 
-from netCDF4 import Dataset
+# from netCDF4 import Dataset  # pylint: disable=no-name-in-module
 import requests
 
 from dmt_app.utils.common import list_files, sha256
@@ -38,8 +40,6 @@ class CredentialsFileError(Exception):
     Custom exception raised when there is a problem with a user's credentials file.
     """
 
-    pass
-
 
 class DmtCredentials:
     def __init__(self, settings_file):
@@ -51,8 +51,8 @@ class DmtCredentials:
         """
         self.path = Path(settings_file).expanduser()
         self._check_credentials()
-        with open(self.path) as fh:
-            self._json = json.load(fh)
+        with open(self.path, encoding="utf-8") as hndl:
+            self._json = json.load(hndl)
 
     @property
     def url(self):
@@ -97,7 +97,7 @@ class DmtCredentials:
             raise CredentialsFileError(msg)
 
 
-class IngestedDataset(object):
+class IngestedDataset:
     """
     An ingested data set that can have files added to it and can then be added
     to the database.
@@ -147,12 +147,13 @@ class IngestedDataset(object):
             found_files = list_files(self.incoming_directory, "")
 
         if not found_files:
-            msg = "No files found in directory or its subdirectories {}".format(
-                self.incoming_directory
+            msg = (
+                f"No files found in directory or its subdirectories "
+                f"{self.incoming_directory}"
             )
             raise ValueError(msg)
 
-        logger.debug("{} files identified".format(len(found_files)))
+        logger.debug(f"{len(found_files)} files identified")
 
         for found_file in found_files:
             data_file = IngestedDatafile(
@@ -161,7 +162,7 @@ class IngestedDataset(object):
             data_file.add_metadata()
             self.datafiles.append(data_file)
 
-        logger.debug("{} files added".format(len(self.datafiles)))
+        logger.debug(f"{len(self.datafiles)} files added")
 
     def to_django_instance(self, base_url, username, password):
         """
@@ -181,7 +182,7 @@ class IngestedDataset(object):
 
         url = f"{base_url}datasets/"
         response = requests.post(url, json=json_attributes, auth=(username, password))
-        if response.status_code != requests.codes.created:
+        if response.status_code != requests.codes.created:  # pylint: disable=no-member
             msg = (
                 f"{response.status_code} ({responses[response.status_code]}) "
                 f"response from HTTP POST {response.url} {self.name} "
@@ -191,9 +192,8 @@ class IngestedDataset(object):
 
         # Get the URL of dataset in the API
         query_params = {attr: getattr(self, attr) for attr in self.django_attributes}
-        query_url = f"{base_url}datasets/"
-        request = requests.get(query_url, params=query_params)
-        if request.status_code != requests.codes.ok:
+        request = requests.get(f"{base_url}datasets/", params=query_params)
+        if request.status_code != requests.codes.ok:  # pylint: disable=no-member
             msg = (
                 f"{request.status_code} ({responses[request.status_code]}) "
                 f"response from HTTP GET {request.url}"
@@ -201,7 +201,7 @@ class IngestedDataset(object):
             raise APIQueryError(msg, server_message=response.text)
         query_json = request.json()
         num_results = len(query_json["results"])
-        if num_results == 0:
+        if num_results == 0:  # pylint: disable=no-else-raise
             raise APIQueryError(
                 f"No datasets found, expecting one from HTTP GET {request.url}"
             )
@@ -218,10 +218,12 @@ class IngestedDataset(object):
             datafile_obj.to_django_instance(base_url, dataset_url, username, password)
 
 
-class IngestedDatafile(object):
+class IngestedDatafile:
     """
     A class that represents a single ingested file.
     """
+
+    # pylint: disable=too-many-instance-attributes
 
     # The attributes that are used in this class to fully describe a data file
     class_attributes = [
@@ -249,12 +251,16 @@ class IngestedDatafile(object):
         self.size = None
         self.checksum_value = None
         self.checksum_type = None
+        # self.time_units = None
+        # self.calendar = None
+        # self.start_time = None
+        # self.end_time = None
 
     def add_metadata(self):
         """
         Load a file and gather as much metadata from it as possible.
         """
-        logger.debug("Getting metadata for {}".format(self.name))
+        logger.debug(f"Getting metadata for {self.name}")
         filepath = os.path.join(self.directory, self.name)
         self.size = os.path.getsize(filepath)
         self.checksum_value = sha256(filepath)
@@ -268,8 +274,7 @@ class IngestedDatafile(object):
 
         # If it's a netCDF file then we can get extra metadata
         # if self.name.endswith('.nc'):
-        #     logger.debug('Getting additional netCDF metadata for {}'.
-        #                  format(self.name))
+        #     logger.debug(f'Getting additional netCDF metadata for {self.name}')
         #     self._add_netcdf4_metadata()
 
     def to_django_instance(self, base_url, dataset, username, password):
@@ -289,7 +294,7 @@ class IngestedDatafile(object):
 
         url = f"{base_url}datafiles/"
         response = requests.post(url, json=json_attributes, auth=(username, password))
-        if response.status_code != requests.codes.created:
+        if response.status_code != requests.codes.created:  # pylint: disable=no-member
             msg = (
                 f"{response.status_code} ({responses[response.status_code]}) "
                 f"response from HTTP POST {response.url} "
@@ -301,28 +306,29 @@ class IngestedDatafile(object):
         """
         Get as much internal metadata as possible using the netCDF4 library.
         """
-        logger.debug("Getting metadata using netCDF4 for {}".format(self.name))
-        filepath = os.path.join(self.directory, self.name)
-        with Dataset(filepath) as rootgrp:
-            if "time" in rootgrp.dimensions:
-                time_dim = rootgrp["time"]
-                self.time_units = time_dim.units
-                self.calendar = time_dim.calendar
-                self.start_time = float(time_dim[:].min())
-                self.end_time = float(time_dim[:].max())
-
-            for variable in rootgrp.variables:
-                if variable not in rootgrp.dimensions:
-                    for var_type in ["var_name", "long_name", "standard_name", "units"]:
-                        if var_type in rootgrp[variable].ncattrs():
-                            var_value = rootgrp[variable].getncattr(var_type)
-                            if var_type == "units":
-                                var_value = str(var_value)
-                            if not getattr(self, var_type):
-                                setattr(self, var_type, var_value)
-                            else:
-                                setattr(
-                                    self,
-                                    var_type,
-                                    getattr(self, var_type) + ", " + var_value,
-                                )
+        # logger.debug(f"Getting metadata using netCDF4 for {self.name}")
+        # filepath = os.path.join(self.directory, self.name)
+        # with Dataset(filepath) as rootgrp:
+        #     if "time" in rootgrp.dimensions:
+        #         time_dim = rootgrp["time"]
+        #         self.time_units = time_dim.units
+        #         self.calendar = time_dim.calendar
+        #         self.start_time = float(time_dim[:].min())
+        #         self.end_time = float(time_dim[:].max())
+        #
+        #     for variable in rootgrp.variables:
+        #         if variable not in rootgrp.dimensions:
+        #             for var_type in ["var_name", "long_name",
+        #                              "standard_name", "units"]:
+        #                 if var_type in rootgrp[variable].ncattrs():
+        #                     var_value = rootgrp[variable].getncattr(var_type)
+        #                     if var_type == "units":
+        #                         var_value = str(var_value)
+        #                     if not getattr(self, var_type):
+        #                         setattr(self, var_type, var_value)
+        #                     else:
+        #                         setattr(
+        #                             self,
+        #                             var_type,
+        #                             getattr(self, var_type) + ", " + var_value,
+        #                         )

@@ -35,16 +35,37 @@ def list_files(directory, suffix=".nc"):
     return nc_files
 
 
-def adler32(fpath):
-    return _checksum("adler32", fpath)
+def adler32(file_path):
+    """
+    Returns the adler32 checksum of `file_path` by calling the external adler32 program.
+
+    :param str file_path: The full path of the file to check
+    :returns: the checksum or None if it cannot be calculated
+    :rtype: str
+    """
+    return _checksum("adler32", file_path)
 
 
-def md5(fpath):
-    return _checksum("md5sum", fpath)
+def md5(file_path):
+    """
+    Returns the md5 checksum of `file_path` by calling the external md5 program.
+
+    :param str file_path: The full path of the file to check
+    :returns: the checksum or None if it cannot be calculated
+    :rtype: str
+    """
+    return _checksum("md5sum", file_path)
 
 
-def sha256(fpath):
-    return _checksum("sha256sum", fpath)
+def sha256(file_path):
+    """
+    Returns the sha256 checksum of `file_path` by calling the external sha256 program.
+
+    :param str file_path: The full path of the file to check
+    :returns: the checksum or None if it cannot be calculated
+    :rtype: str
+    """
+    return _checksum("sha256sum", file_path)
 
 
 def _checksum(checksum_method, file_path):
@@ -53,12 +74,14 @@ def _checksum(checksum_method, file_path):
     None if running the program was unsuccessful.
 
     :param str checksum_method: The name of the checksum executable to run
-    :param str file_path: The full path of teh file to check
+    :param str file_path: The full path of the file to check
     :returns: the checksum or None if it cannot be calculated
     :rtype: str
     """
     command = [checksum_method, file_path]
-    completed = subprocess.run(command, stdout=subprocess.PIPE)  # nosec B603
+    completed = subprocess.run(
+        command, check=False, stdout=subprocess.PIPE
+    )  # nosec B603
     if completed.returncode != 0:
         checksum = None
     else:

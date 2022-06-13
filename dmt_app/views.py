@@ -4,6 +4,12 @@
 # BSD 3-Clause license.
 # See LICENSE in the root of the repository for full licensing details.
 
+"""
+Django views for the dmt_app
+"""
+
+# pylint: disable=too-many-ancestors
+
 from django.shortcuts import render
 from django.conf import settings
 from rest_framework import permissions, viewsets
@@ -17,6 +23,8 @@ from .utils.table_views import PagedFilteredTableView
 
 
 class DataFileList(PagedFilteredTableView):
+    """Show Data files"""
+
     model = DataFile
     table_class = DataFileTable
     filter_class = DataFileFilter
@@ -24,6 +32,8 @@ class DataFileList(PagedFilteredTableView):
 
 
 class DataSetList(PagedFilteredTableView):
+    """Show Data sets"""
+
     model = DataSet
     table_class = DataSetTable
     filter_class = DataSetFilter
@@ -31,21 +41,22 @@ class DataSetList(PagedFilteredTableView):
 
 
 def view_home(request):
+    """Show the home page"""
     return render(
         request, "dmt_app/home.html", {"request": request, "page_title": "DMT"}
     )
 
 
 class SetPagination(PageNumberPagination):
+    """Control the API's pagination"""
+
     page_size = settings.REST_PAGE_SIZE
     page_size_query_param = "page_size"
     max_page_size = settings.REST_MAX_PAGE_SIZE
 
 
 class DataSetViewSet(viewsets.ModelViewSet):
-    """
-    Rest API viewset for datasets
-    """
+    """Rest API viewset for datasets"""
 
     queryset = DataSet.objects.all()
     serializer_class = DataSetSerializer
@@ -54,13 +65,12 @@ class DataSetViewSet(viewsets.ModelViewSet):
     filterset_fields = ["name", "version"]
 
     def perform_create(self, serializer):
+        """Save the username on set creation in the API"""
         serializer.save(creator=self.request.user.username)
 
 
 class DataFileViewSet(viewsets.ModelViewSet):
-    """
-    Rest API viewset for datafiles
-    """
+    """Rest API viewset for datafiles"""
 
     queryset = DataFile.objects.all()
     serializer_class = DataFileSerializer

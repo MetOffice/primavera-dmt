@@ -4,6 +4,10 @@
 # BSD 3-Clause license.
 # See LICENSE in the root of the repository for full licensing details.
 
+"""Configuration file for the Sphinx documentation builder."""
+
+# pylint: disable=invalid-name
+
 # Configuration file for the Sphinx documentation builder.
 #
 # This file only contains a selection of the most common options. For a full
@@ -23,7 +27,7 @@
 # -- Project information -----------------------------------------------------
 
 project = "primavera_dmt"
-copyright = "2022, Met Office"
+copyright = "2022, Met Office"  # pylint: disable=redefined-builtin
 author = "Met Office"
 
 # The full version, including alpha/beta/rc tags

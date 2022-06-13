@@ -4,6 +4,8 @@
 # BSD 3-Clause license.
 # See LICENSE in the root of the repository for full licensing details.
 
+"""Django models defining the data types in the dmt_app"""
+
 from django.db import models
 from django.db.models import CASCADE
 
@@ -53,10 +55,8 @@ class DataSet(models.Model):
         if files_offline:
             if files_online:
                 return "partial"
-            else:
-                return "offline"
-        else:
-            return "online"
+            return "offline"
+        return "online"
 
     def __str__(self):
         return f"{self.name} ({self.version})" if self.version else self.name

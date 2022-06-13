@@ -26,7 +26,9 @@ class DataFileTable(tables.Table):
     Table to display dmt_app.models.DataFile
     """
 
-    class Meta:
+    class Meta:  # pylint: disable=too-few-public-methods
+        """Django model metadata"""
+
         model = DataFile
         attrs = {"class": "paleblue"}
         exclude = (
@@ -41,10 +43,12 @@ class DataFileTable(tables.Table):
 
     checksum = tables.Column(empty_values=(), verbose_name="Checksum", orderable=False)
 
-    def render_checksum(self, record):
+    def render_checksum(self, record):  # pylint: disable=no-self-use
+        """Render the checksum nicely"""
         return f"{record.checksum_type}: {record.checksum_value}"
 
-    def render_size(self, value):
+    def render_size(self, value):  # pylint: disable=no-self-use
+        """Display the file's size in a human-readable form"""
         return filesizeformat(value)
 
 
@@ -53,7 +57,9 @@ class DataSetTable(tables.Table):
     Table to display dmt_app.models.DataSet
     """
 
-    class Meta:
+    class Meta:  # pylint: disable=too-few-public-methods
+        """Django model metadata"""
+
         model = DataSet
         attrs = {"class": "paleblue"}
         exclude = ("id", "creator")
@@ -76,7 +82,8 @@ class DataSetTable(tables.Table):
     )
     online_status = tables.Column(empty_values=(), orderable=False)
 
-    def render_num_files(self, record):
+    def render_num_files(self, record):  # pylint: disable=no-self-use
+        """Allow the number of files to link to the set's files"""
         num_datafiles = record.datafile_set.count()
         url_query = urlencode(
             {
@@ -85,16 +92,15 @@ class DataSetTable(tables.Table):
             }
         )
         return format_html(
-            '<a href="{}?{}">{}</a>'.format(
-                reverse("datafiles"), url_query, num_datafiles
-            )
+            f'<a href="{reverse("datafiles")}?{url_query}">{num_datafiles}</a>'
         )
 
-    def render_date_downloaded(self, value):
+    def render_date_downloaded(self, value):  # pylint: disable=no-self-use
+        """Display the date as DD/MM/YYYY"""
         if isinstance(value, datetime.datetime):
             return value.strftime("%Y-%m-%d")
-        else:
-            return DEFAULT_VALUE
+        return DEFAULT_VALUE
 
-    def render_doi(self, value):
+    def render_doi(self, value):  # pylint: disable=no-self-use
+        """Render the DOI as a working hyperlink"""
         return format_html(f'<a href="https://doi.org/{value}">{value}</a>')

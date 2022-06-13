@@ -19,7 +19,7 @@ import django
 
 django.setup()
 
-from dmt_app.utils.ingestion import (  # noqa
+from dmt_app.utils.ingestion import (  # noqa # pylint: disable=wrong-import-position
     APIQueryError,
     CredentialsFileError,
     DmtCredentials,
@@ -50,7 +50,7 @@ def parse_args():
         help="set logging level to one of debug, info, warn (the default), or error",
     )
     parser.add_argument(
-        "--version", action="version", version="%(prog)s {}".format(__version__)
+        "--version", action="version", version=f"%(prog)s {__version__}"
     )
     parser.add_argument("directory", help="The dataset's top-level directory")
     parser.add_argument("name", help="The dataset's name")
@@ -103,13 +103,13 @@ if __name__ == "__main__":
     # determine the log level
     if cmd_args.log_level:
         try:
-            log_level = getattr(logging, cmd_args.log_level.upper())
+            LOG_LEVEL = getattr(logging, cmd_args.log_level.upper())
         except AttributeError:
             logger.setLevel(logging.WARNING)
             logger.error("log-level must be one of: debug, info, warn or error")
             sys.exit(1)
     else:
-        log_level = DEFAULT_LOG_LEVEL
+        LOG_LEVEL = DEFAULT_LOG_LEVEL
 
     # configure the logger
     logging.config.dictConfig(
@@ -123,13 +123,13 @@ if __name__ == "__main__":
             },
             "handlers": {
                 "default": {
-                    "level": log_level,
+                    "level": LOG_LEVEL,
                     "class": "logging.StreamHandler",
                     "formatter": "standard",
                 },
             },
             "loggers": {
-                "": {"handlers": ["default"], "level": log_level, "propagate": True}
+                "": {"handlers": ["default"], "level": LOG_LEVEL, "propagate": True}
             },
         }
     )

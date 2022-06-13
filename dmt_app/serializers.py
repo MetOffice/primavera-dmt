@@ -4,6 +4,7 @@
 # BSD 3-Clause license.
 # See LICENSE in the root of the repository for full licensing details.
 
+# pylint: disable=missing-class-docstring
 """
 Serialize the models for the REST API
 """

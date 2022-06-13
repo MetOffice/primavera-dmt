@@ -15,12 +15,15 @@ from django_tables2 import SingleTableView
 
 
 class PagedFilteredTableView(SingleTableView):
+    # pylint: disable=attribute-defined-outside-init, missing-class-docstring
+    # pylint: disable=super-with-arguments, too-many-ancestors
     filter_class = None
     context_filter_name = "filter"
     page_title = None
 
     def get_queryset(self, **kwargs):
         qs = super(PagedFilteredTableView, self).get_queryset()
+        # pylint: disable=not-callable
         self.filter = self.filter_class(self.request.GET, queryset=qs)
         return self.filter.qs.distinct()
 

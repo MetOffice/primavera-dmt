@@ -4,6 +4,8 @@
 # BSD 3-Clause license.
 # See LICENSE in the root of the repository for full licensing details.
 
+"""Set the dmt_app's URLs"""
+
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 

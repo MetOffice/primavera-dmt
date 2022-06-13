@@ -4,6 +4,8 @@
 # BSD 3-Clause license.
 # See LICENSE in the root of the repository for full licensing details.
 
+"""Django boilerplate to add the dmt_app app to the admin site"""
+
 from django.contrib import admin
 
 from dmt_app.models import DataFile, DataSet

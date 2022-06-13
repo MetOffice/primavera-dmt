@@ -30,6 +30,8 @@ class DataFileFilter(django_filters.FilterSet):
     dataset = django_filters.NumberFilter(field_name="dataset__id")
 
     def filter_online(self, queryset, name, value):
+        """Allow filtering of online status"""
+        # pylint: disable=unused-argument, no-else-return, no-self-use
         if value:
             return queryset.filter(online=True)
         else:

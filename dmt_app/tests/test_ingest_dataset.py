@@ -4,6 +4,8 @@
 # BSD 3-Clause license.
 # See LICENSE in the root of the repository for full licensing details.
 
+# pylint: disable=missing-function-docstring
+
 """
 test_ingest_dataset.py
 
@@ -29,8 +31,8 @@ class TestDmtCredentials(TestCase):
     "username": "joebloggs",
     "password": "h!wkp#_ia%a%"
 }"""
-        with open(self.creds_filename, "w") as fh:
-            fh.write(self.creds_text)
+        with open(self.creds_filename, "w", encoding="utf-8") as hndl:
+            hndl.write(self.creds_text)
         # Set permissions to 0o400 (r--------)
         os.chmod(self.creds_filename, stat.S_IRUSR)
 
@@ -42,6 +44,7 @@ class TestDmtCredentials(TestCase):
 
     def test_load(self):
         creds = DmtCredentials(self.creds_filename)
+        # pylint: disable=protected-access
         self.assertEqual(creds._json, ast.literal_eval(self.creds_text))
 
     def test_permissions_user_write(self):

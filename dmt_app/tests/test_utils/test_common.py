@@ -4,6 +4,9 @@
 # BSD 3-Clause license.
 # See LICENSE in the root of the repository for full licensing details.
 
+# pylint: disable=missing-function-docstring, missing-class-docstring
+# pylint: disable=too-few-public-methods
+
 """
 Test dmt_app.utils.common
 """
