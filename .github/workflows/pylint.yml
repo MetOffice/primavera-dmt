@@ -25,6 +25,10 @@ jobs:
     - name: Report pylint version
       run: |
         pylint --version
+    - name: Configure Django
+      run: |
+        export DJANGO_SETTINGS_MODULE=dmt_site.settings
+        export PYTHONPATH=.
     - name: Check dmt_app code with pylint (IGNORE TODOs)
       run: |
         pylint -d fixme dmt_app
