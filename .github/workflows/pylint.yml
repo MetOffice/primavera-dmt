@@ -25,9 +25,9 @@ jobs:
     - name: Report pylint version
       run: |
         pylint --version
-    - name: Check dmt_app code with pylint
+    - name: Check dmt_app code with pylint (IGNORE TODOs)
       run: |
-        pylint dmt_app
+        pylint -d fixme dmt_app
     - name: Check dmt_site code with pylint
       run: |
         pylint dmt_site
