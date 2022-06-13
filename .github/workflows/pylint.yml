@@ -22,6 +22,13 @@ jobs:
         sed -i 's/^# pylint/pylint/g' requirements.txt
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+    - name: Configure Django
+      run: |
+        export DJANGO_SETTINGS_MODULE=dmt_site.settings
+        export PYTHONPATH=.
+        cp dmt_site/local_settings.py.tmpl dmt_site/local_settings.py
+        django-admin makemigrations dmt_app
+        django-admin migrate
     - name: Report pylint version
       run: |
         pylint --version
