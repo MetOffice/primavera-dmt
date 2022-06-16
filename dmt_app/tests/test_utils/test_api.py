@@ -177,11 +177,13 @@ class TestBasicPostApi(TestCase):
             f"{self.base_url}datasets/",
             json=self.sample_data.dataset_attrs,
         )
+        # Check that the set was created successfully
         self.assertEqual(response.status_code, requests.codes.created)
         dataset = DataSet.objects.get(
             name=self.sample_data.dataset_attrs["name"],
             version=self.sample_data.dataset_attrs["version"],
         )
+        # Check that the creator attribute in the API response matches that in the DB
         self.assertEqual(dataset.creator, self.test_user_attributes["username"])
 
     def test_create_datafile(self):
@@ -194,18 +196,19 @@ class TestBasicPostApi(TestCase):
         self.assertEqual(dataset_response.status_code, requests.codes.created)
         dataset_id = dataset_response.json()["id"]
         dataset_url = f"{self.base_url}datasets/{dataset_id}/"
-
         # Can now create and test a DataFile
         self.sample_data.datafile1_attrs["dataset"] = dataset_url
         datafile_response = self.client.post(
             f"{self.base_url}datafiles/",
             json=self.sample_data.datafile1_attrs,
         )
+        # Check that the file was created successfully
         self.assertEqual(datafile_response.status_code, requests.codes.created)
         datafile = DataFile.objects.get(
             name=self.sample_data.datafile1_attrs["name"],
             incoming_directory=self.sample_data.datafile1_attrs["incoming_directory"],
         )
+        # Check that all compulsory attributes were created successfully
         for key in self.sample_data.datafile1_attrs:
             if key == "dataset":
                 self.assertEqual(datafile.dataset.id, dataset_id)
