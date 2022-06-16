@@ -58,7 +58,7 @@ class SetPagination(PageNumberPagination):
 class DataSetViewSet(viewsets.ModelViewSet):
     """Rest API viewset for datasets"""
 
-    queryset = DataSet.objects.all()
+    queryset = DataSet.objects.all().order_by("id")
     serializer_class = DataSetSerializer
     pagination_class = SetPagination
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
@@ -72,7 +72,7 @@ class DataSetViewSet(viewsets.ModelViewSet):
 class DataFileViewSet(viewsets.ModelViewSet):
     """Rest API viewset for datafiles"""
 
-    queryset = DataFile.objects.all()
+    queryset = DataFile.objects.all().order_by("id")
     serializer_class = DataFileSerializer
     pagination_class = SetPagination
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
