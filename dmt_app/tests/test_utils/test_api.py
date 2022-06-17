@@ -15,7 +15,7 @@ options to test just the serializer, but this almost integration test seemed
 preferable to guarantee the correct testing of user interactions.
 """
 
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.test import TestCase
 import requests
 from requests.auth import HTTPBasicAuth
@@ -34,7 +34,7 @@ class TestBasicGetApi(TestCase):
         self.client = RequestsClient()
         self.base_url = "http://testserver/api/"
         # See an unlimited diff in case of error
-        self.maxDiff = None
+        self.maxDiff = None  # pylint: disable=invalid-name
 
     def test_specified_dataset_returned(self):
         response = self.client.get(
@@ -157,7 +157,7 @@ class TestBasicPostApi(TestCase):
             "email": "test@test.com",
             "password": "qwe123qwe",
         }
-        User.objects.create_user(**self.test_user_attributes)
+        get_user_model().objects.create_user(**self.test_user_attributes)
         # Client set-up
         self.client = RequestsClient()
         self.base_url = "http://testserver/api/"
@@ -169,7 +169,7 @@ class TestBasicPostApi(TestCase):
         # Sample data
         self.sample_data = SampleDjangoEntities()
         # See an unlimited diff in case of error
-        self.maxDiff = None
+        self.maxDiff = None  # pylint: disable=invalid-name
 
     def test_create_dataset(self):
         self.sample_data.dataset_attrs["datafile_set"] = []
@@ -178,6 +178,7 @@ class TestBasicPostApi(TestCase):
             json=self.sample_data.dataset_attrs,
         )
         # Check that the set was created successfully
+        # pylint: disable=no-member
         self.assertEqual(response.status_code, requests.codes.created)
         dataset = DataSet.objects.get(
             name=self.sample_data.dataset_attrs["name"],
@@ -193,6 +194,7 @@ class TestBasicPostApi(TestCase):
             f"{self.base_url}datasets/",
             json=self.sample_data.dataset_attrs,
         )
+        # pylint: disable=no-member
         self.assertEqual(dataset_response.status_code, requests.codes.created)
         dataset_id = dataset_response.json()["id"]
         dataset_url = f"{self.base_url}datasets/{dataset_id}/"
@@ -203,16 +205,15 @@ class TestBasicPostApi(TestCase):
             json=self.sample_data.datafile1_attrs,
         )
         # Check that the file was created successfully
+        # pylint: disable=no-member
         self.assertEqual(datafile_response.status_code, requests.codes.created)
         datafile = DataFile.objects.get(
             name=self.sample_data.datafile1_attrs["name"],
             incoming_directory=self.sample_data.datafile1_attrs["incoming_directory"],
         )
         # Check that all compulsory attributes were created successfully
-        for key in self.sample_data.datafile1_attrs:
+        for key, value in self.sample_data.datafile1_attrs.items():
             if key == "dataset":
                 self.assertEqual(datafile.dataset.id, dataset_id)
             else:
-                self.assertEqual(
-                    getattr(datafile, key), self.sample_data.datafile1_attrs[key]
-                )
+                self.assertEqual(getattr(datafile, key), value)
