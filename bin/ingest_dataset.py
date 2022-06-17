@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # (C) Crown Copyright, Met Office. All rights reserved.
 #
@@ -12,12 +12,9 @@ ingest_dataset.py
 Capture the metadata from a dataset and add this to the database.
 """
 import argparse
-import logging
+import logging.config
 import sys
 
-import django
-
-django.setup()
 
 from dmt_app.utils.ingestion import (  # noqa # pylint: disable=wrong-import-position
     APIQueryError,
