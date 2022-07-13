@@ -9,7 +9,7 @@
 import os
 import tempfile
 
-from netCDF4 import Dataset as NCDataset
+from netCDF4 import Dataset as NCDataset  # pylint: disable=no-name-in-module
 
 from dmt_app.models import DataFile, DataSet
 
@@ -61,7 +61,7 @@ def make_sample_netcdf(filename):
     :param str filename: The full path of the netCDF file to create
     """
     _fd, cdl_filename = tempfile.mkstemp(suffix=".cdl")
-    with open(cdl_filename, "w") as hndl:
+    with open(cdl_filename, "w", encoding="utf-8") as hndl:
         hndl.writelines(REALISTIC_NETCDF_CDL)
     NCDataset.fromcdl(cdl_filename, filename)
     os.remove(cdl_filename)
@@ -70,30 +70,30 @@ def make_sample_netcdf(filename):
 REALISTIC_NETCDF_CDL = """
 netcdf realistic_3d {
 dimensions:
-	time = 7 ;
-	grid_latitude = 9 ;
-	grid_longitude = 11 ;
+    time = 7 ;
+    grid_latitude = 9 ;
+    grid_longitude = 11 ;
 variables:
-	int64 air_potential_temperature(time, grid_latitude, grid_longitude) ;
-		air_potential_temperature:standard_name = "air_potential_temperature" ;
-		air_potential_temperature:units = "K" ;
-	double time(time) ;
-		time:axis = "T" ;
-		time:units = "hours since 1970-01-01 00:00:00" ;
-		time:standard_name = "time" ;
-		time:calendar = "gregorian" ;
-	double grid_latitude(grid_latitude) ;
-		grid_latitude:axis = "Y" ;
-		grid_latitude:units = "degrees" ;
-		grid_latitude:standard_name = "grid_latitude" ;
-	double grid_longitude(grid_longitude) ;
-		grid_longitude:axis = "X" ;
-		grid_longitude:units = "degrees" ;
-		grid_longitude:standard_name = "grid_longitude" ;
+    int64 air_potential_temperature(time, grid_latitude, grid_longitude) ;
+        air_potential_temperature:standard_name = "air_potential_temperature" ;
+        air_potential_temperature:units = "K" ;
+    double time(time) ;
+        time:axis = "T" ;
+        time:units = "hours since 1970-01-01 00:00:00" ;
+        time:standard_name = "time" ;
+        time:calendar = "gregorian" ;
+    double grid_latitude(grid_latitude) ;
+        grid_latitude:axis = "Y" ;
+        grid_latitude:units = "degrees" ;
+        grid_latitude:standard_name = "grid_latitude" ;
+    double grid_longitude(grid_longitude) ;
+        grid_longitude:axis = "X" ;
+        grid_longitude:units = "degrees" ;
+        grid_longitude:standard_name = "grid_longitude" ;
 
 // global attributes:
-		:source = "Iris test case" ;
-		:Conventions = "CF-1.7" ;
+        :source = "Iris test case" ;
+        :Conventions = "CF-1.7" ;
 data:
 
  air_potential_temperature =

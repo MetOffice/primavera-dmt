@@ -21,11 +21,14 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from rest_framework.test import RequestsClient
 
-from django.contrib.auth.models import User
 from dmt_app.models import DataFile
-from dmt_app.utils.ingestion import (CredentialsFileError, DmtCredentials,
-                                     IngestedDataset)
+from dmt_app.utils.ingestion import (
+    CredentialsFileError,
+    DmtCredentials,
+    IngestedDataset,
+)
 from .test_utils.common import make_sample_netcdf
+
 
 class TestDmtCredentials(TestCase):
     """Test dmt_app.utils.ingestion.DmtCredentials"""
@@ -115,11 +118,11 @@ class TestIngestion(TestCase):
         get_user_model().objects.create_user(**self.test_user_attributes)
         # Use mock to monkey patch in the test client
         self.client = RequestsClient()
-        patch = mock.patch('dmt_app.utils.ingestion.requests.post')
+        patch = mock.patch("dmt_app.utils.ingestion.requests.post")
         self.requests_post = patch.start()
         self.requests_post.side_effect = self.client.post
         self.addCleanup(patch.stop)
-        patch = mock.patch('dmt_app.utils.ingestion.requests.get')
+        patch = mock.patch("dmt_app.utils.ingestion.requests.get")
         self.requests_post = patch.start()
         self.requests_post.side_effect = self.client.get
         self.addCleanup(patch.stop)
@@ -136,8 +139,9 @@ class TestIngestion(TestCase):
         data_file = DataFile.objects.get(name=os.path.basename(self.netcdf_filename))
         self.assertEqual(data_file.incoming_directory, self.dataset_dir)
         self.assertEqual(data_file.directory, self.dataset_dir)
-        file_size = os.stat(os.path.join(self.dataset_dir,
-                                         self.netcdf_filename)).st_size
+        file_size = os.stat(
+            os.path.join(self.dataset_dir, self.netcdf_filename)
+        ).st_size
         self.assertEqual(data_file.size, file_size)
         self.assertTrue(data_file.online)
         self.assertEqual(data_file.dataset.name, "DATASET")
@@ -156,8 +160,9 @@ class TestIngestion(TestCase):
         data_file = DataFile.objects.get(name=os.path.basename(self.netcdf_filename))
         self.assertEqual(data_file.incoming_directory, self.dataset_dir)
         self.assertEqual(data_file.directory, self.dataset_dir)
-        file_size = os.stat(os.path.join(self.dataset_dir,
-                                         self.netcdf_filename)).st_size
+        file_size = os.stat(
+            os.path.join(self.dataset_dir, self.netcdf_filename)
+        ).st_size
         self.assertEqual(data_file.size, file_size)
         self.assertTrue(data_file.online)
         self.assertEqual(data_file.dataset.name, "DATASET")
@@ -166,8 +171,7 @@ class TestIngestion(TestCase):
         data_file = DataFile.objects.get(name=os.path.basename(self.text_filename))
         self.assertEqual(data_file.incoming_directory, self.dataset_dir)
         self.assertEqual(data_file.directory, self.dataset_dir)
-        file_size = os.stat(os.path.join(self.dataset_dir,
-                                         self.text_filename)).st_size
+        file_size = os.stat(os.path.join(self.dataset_dir, self.text_filename)).st_size
         self.assertEqual(data_file.size, file_size)
         self.assertTrue(data_file.online)
         self.assertEqual(data_file.dataset.name, "DATASET")
