@@ -15,11 +15,17 @@ import ast
 import os
 import stat
 import tempfile
+from unittest import mock
 
+from django.contrib.auth import get_user_model
 from django.test import TestCase
+from rest_framework.test import RequestsClient
 
-from dmt_app.utils.ingestion import CredentialsFileError, DmtCredentials
-
+from django.contrib.auth.models import User
+from dmt_app.models import DataFile
+from dmt_app.utils.ingestion import (CredentialsFileError, DmtCredentials,
+                                     IngestedDataset)
+from .test_utils.common import make_sample_netcdf
 
 class TestDmtCredentials(TestCase):
     """Test dmt_app.utils.ingestion.DmtCredentials"""
@@ -89,3 +95,86 @@ class TestDmtCredentials(TestCase):
     def test_password(self):
         creds = DmtCredentials(self.creds_filename)
         self.assertEqual(creds.password, "h!wkp#_ia%a%")
+
+
+class TestIngestion(TestCase):
+    """Integration test for dmt_app.utils.ingestion.IngestedDataset"""
+
+    def setUp(self):
+        """Create sample files"""
+        self.dataset_dir = tempfile.mkdtemp()
+        _fd, self.netcdf_filename = tempfile.mkstemp(suffix=".nc", dir=self.dataset_dir)
+        make_sample_netcdf(self.netcdf_filename)
+        _fd, self.text_filename = tempfile.mkstemp(suffix=".txt", dir=self.dataset_dir)
+        # Create a user so that the API can be used
+        self.test_user_attributes = {
+            "username": "joebloggs",
+            "email": "test@test.com",
+            "password": "h!wkp#_ia%a%",
+        }
+        get_user_model().objects.create_user(**self.test_user_attributes)
+        # Use mock to monkey patch in the test client
+        self.client = RequestsClient()
+        patch = mock.patch('dmt_app.utils.ingestion.requests.post')
+        self.requests_post = patch.start()
+        self.requests_post.side_effect = self.client.post
+        self.addCleanup(patch.stop)
+        patch = mock.patch('dmt_app.utils.ingestion.requests.get')
+        self.requests_post = patch.start()
+        self.requests_post.side_effect = self.client.get
+        self.addCleanup(patch.stop)
+
+    def test_ingestion_netcdf_only(self):
+        dataset = IngestedDataset("DATASET", "V1.0", self.dataset_dir)
+        dataset.add_files(only_netcdf=True)
+        dataset.to_django_instance(
+            "http://testserver/api/",
+            self.test_user_attributes["username"],
+            self.test_user_attributes["password"],
+        )
+        self.assertEqual(DataFile.objects.count(), 1)
+        data_file = DataFile.objects.get(name=os.path.basename(self.netcdf_filename))
+        self.assertEqual(data_file.incoming_directory, self.dataset_dir)
+        self.assertEqual(data_file.directory, self.dataset_dir)
+        file_size = os.stat(os.path.join(self.dataset_dir,
+                                         self.netcdf_filename)).st_size
+        self.assertEqual(data_file.size, file_size)
+        self.assertTrue(data_file.online)
+        self.assertEqual(data_file.dataset.name, "DATASET")
+        self.assertEqual(data_file.dataset.version, "V1.0")
+
+    def test_ingestion_all_file_types(self):
+        dataset = IngestedDataset("DATASET", "V1.0", self.dataset_dir)
+        dataset.add_files(only_netcdf=False)
+        dataset.to_django_instance(
+            "http://testserver/api/",
+            self.test_user_attributes["username"],
+            self.test_user_attributes["password"],
+        )
+        self.assertEqual(DataFile.objects.count(), 2)
+        # Check netCDF file
+        data_file = DataFile.objects.get(name=os.path.basename(self.netcdf_filename))
+        self.assertEqual(data_file.incoming_directory, self.dataset_dir)
+        self.assertEqual(data_file.directory, self.dataset_dir)
+        file_size = os.stat(os.path.join(self.dataset_dir,
+                                         self.netcdf_filename)).st_size
+        self.assertEqual(data_file.size, file_size)
+        self.assertTrue(data_file.online)
+        self.assertEqual(data_file.dataset.name, "DATASET")
+        self.assertEqual(data_file.dataset.version, "V1.0")
+        # Check text file
+        data_file = DataFile.objects.get(name=os.path.basename(self.text_filename))
+        self.assertEqual(data_file.incoming_directory, self.dataset_dir)
+        self.assertEqual(data_file.directory, self.dataset_dir)
+        file_size = os.stat(os.path.join(self.dataset_dir,
+                                         self.text_filename)).st_size
+        self.assertEqual(data_file.size, file_size)
+        self.assertTrue(data_file.online)
+        self.assertEqual(data_file.dataset.name, "DATASET")
+        self.assertEqual(data_file.dataset.version, "V1.0")
+
+    def tearDown(self) -> None:
+        """Remove temporary files"""
+        os.remove(self.netcdf_filename)
+        os.remove(self.text_filename)
+        os.rmdir(self.dataset_dir)

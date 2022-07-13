@@ -6,11 +6,11 @@ djangorestframework
 numpy
 netCDF4
 requests
-# Uncomment the next line if the system sqlite is not recent enough for Django
+# Uncomment the next pysqlite3-binary line if the system sqlite is not recent enough for Django
 # pysqlite3-binary
-# Uncomment the following lines if you would like to be able to build the documentation
+# Uncomment the following sphinx lines if you would like to be able to build the documentation
 # sphinx
 # sphinx-rtd-theme
-# Uncomment the following lines if you would like to run pylint
+# Uncomment the following pylint lines if you would like to run pylint
 # pylint
 # pylint-django
