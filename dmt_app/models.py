@@ -120,6 +120,8 @@ class DataFile(models.Model):
 
     @property
     def variable(self):
+        """Most appropriate variable names"""
+        # pylint: disable=unused-argument, no-else-return
         if self.standard_name:
             return self.standard_name
         elif self.long_name:
@@ -131,6 +133,8 @@ class DataFile(models.Model):
 
     @property
     def start_string(self):
+        """First date in file"""
+        # pylint: disable=unused-argument, no-else-return
         if self.start_time is not None and self.time_units and self.calendar:
             return cftime.num2date(
                 self.start_time, self.time_units, self.calendar
@@ -140,6 +144,8 @@ class DataFile(models.Model):
 
     @property
     def end_string(self):
+        """Last date in file"""
+        # pylint: disable=unused-argument, no-else-return
         if self.end_time is not None and self.time_units and self.calendar:
             return cftime.num2date(
                 self.end_time, self.time_units, self.calendar

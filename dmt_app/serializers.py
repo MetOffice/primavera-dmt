@@ -57,4 +57,4 @@ class DataFileSerializer(serializers.HyperlinkedModelSerializer):
             "units",
             "dimensions",
             "dataset",
-        )
+        )  # pylint: disable=duplicate-code

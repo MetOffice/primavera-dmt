@@ -223,7 +223,7 @@ class IngestedDatafile:
     A class that represents a single ingested file.
     """
 
-    # pylint: disable=too-many-instance-attributes
+    # pylint: disable=too-many-instance-attributes,duplicate-code
 
     # The attributes that are used in this class to fully describe a data file
     class_attributes = [
