@@ -6,10 +6,12 @@
 
 """Django models defining the data types in the dmt_app"""
 
+import cftime
+
 from django.db import models
 from django.db.models import CASCADE
 
-from .vocabs import CHECKSUM_TYPES
+from .vocabs import CALENDARS, CHECKSUM_TYPES
 
 
 class DataSet(models.Model):
@@ -84,6 +86,59 @@ class DataFile(models.Model):
     checksum_type = models.CharField(max_length=20, choices=CHECKSUM_TYPES, blank=False)
 
     online = models.BooleanField(default=True, blank=False, verbose_name="Online?")
+
+    # DateTimes are allowed to be null/blank because some fields (such as
+    # orography) are time-independent
+    start_time = models.FloatField(verbose_name="Start time",
+                                   null=True, blank=True)
+    end_time = models.FloatField(verbose_name="End time",
+                                 null=True, blank=True)
+    time_units = models.CharField(verbose_name='Time units', max_length=50,
+                                  null=True, blank=True)
+    calendar = models.CharField(verbose_name='Calendar', max_length=20,
+                                null=True, blank=True,
+                                choices=CALENDARS)
+    frequency = models.CharField(max_length=200, null=True, blank=True,
+                                 verbose_name='Frequency')
+
+    # Details of the variables in the file
+    standard_name = models.CharField(max_length=500, null=True, blank=True,
+                                     verbose_name='Standard name')
+    long_name = models.CharField(max_length=500, null=True, blank=True,
+                                 verbose_name='Long name')
+    var_name = models.CharField(max_length=200, null=True, blank=True,
+                                verbose_name='Var name')
+    units = models.CharField(max_length=200, null=True, blank=True,
+                             verbose_name='Units')
+    dimensions = models.CharField(max_length=200, null=True, blank=True,
+                                  verbose_name='Dimensions')
+
+    @property
+    def variable(self):
+        if self.standard_name:
+            return self.standard_name
+        elif self.long_name:
+            return self.long_name
+        elif self.var_name:
+            return self.var_name
+        else:
+            return None
+
+    @property
+    def start_string(self):
+        if self.start_time is not None and self.time_units and self.calendar:
+            return cftime.num2date(self.start_time, self.time_units,
+                                     self.calendar).strftime('%Y-%m-%d')
+        else:
+            return None
+
+    @property
+    def end_string(self):
+        if self.end_time is not None and self.time_units and self.calendar:
+            return cftime.num2date(self.end_time, self.time_units,
+                                   self.calendar).strftime('%Y-%m-%d')
+        else:
+            return None
 
     # Foreign Key Relationships
     dataset = models.ForeignKey(

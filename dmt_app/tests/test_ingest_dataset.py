@@ -146,6 +146,12 @@ class TestIngestion(TestCase):
         self.assertTrue(data_file.online)
         self.assertEqual(data_file.dataset.name, "DATASET")
         self.assertEqual(data_file.dataset.version, "V1.0")
+        self.assertEqual(data_file.start_string, "2014-12-21")
+        self.assertEqual(data_file.end_string, "2014-12-22")
+        self.assertEqual(data_file.variable, "air_potential_temperature")
+        self.assertEqual(data_file.units, "K")
+        self.assertIsNone(data_file.frequency)
+        self.assertEqual(data_file.dimensions, "time, grid_latitude, grid_longitude")
 
     def test_ingestion_all_file_types(self):
         dataset = IngestedDataset("DATASET", "V1.0", self.dataset_dir)
@@ -167,6 +173,12 @@ class TestIngestion(TestCase):
         self.assertTrue(data_file.online)
         self.assertEqual(data_file.dataset.name, "DATASET")
         self.assertEqual(data_file.dataset.version, "V1.0")
+        self.assertEqual(data_file.start_string, "2014-12-21")
+        self.assertEqual(data_file.end_string, "2014-12-22")
+        self.assertEqual(data_file.variable, "air_potential_temperature")
+        self.assertEqual(data_file.units, "K")
+        self.assertIsNone(data_file.frequency)
+        self.assertEqual(data_file.dimensions, "time, grid_latitude, grid_longitude")
         # Check text file
         data_file = DataFile.objects.get(name=os.path.basename(self.text_filename))
         self.assertEqual(data_file.incoming_directory, self.dataset_dir)

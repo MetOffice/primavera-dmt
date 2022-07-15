@@ -15,7 +15,7 @@ import logging
 import os
 from pathlib import Path
 
-# from netCDF4 import Dataset  # pylint: disable=no-name-in-module
+from netCDF4 import Dataset  # pylint: disable=no-name-in-module
 import requests
 
 from dmt_app.utils.common import list_files, sha256
@@ -234,6 +234,16 @@ class IngestedDatafile:
         "size",
         "checksum_value",
         "checksum_type",
+        "time_units",
+        "calendar",
+        "start_time",
+        "end_time",
+        "frequency",
+        "standard_name",
+        "long_name",
+        "var_name",
+        "units",
+        "dimensions",
     ]
 
     def __init__(self, name, incoming_directory):
@@ -251,10 +261,16 @@ class IngestedDatafile:
         self.size = None
         self.checksum_value = None
         self.checksum_type = None
-        # self.time_units = None
-        # self.calendar = None
-        # self.start_time = None
-        # self.end_time = None
+        self.time_units = None
+        self.calendar = None
+        self.start_time = None
+        self.end_time = None
+        self.frequency = None
+        self.standard_name = None
+        self.long_name = None
+        self.var_name = None
+        self.units = None
+        self.dimensions = None
 
     def add_metadata(self):
         """
@@ -265,17 +281,16 @@ class IngestedDatafile:
         self.size = os.path.getsize(filepath)
         self.checksum_value = sha256(filepath)
         self.checksum_type = "SHA256"
-        # if '_' in self.name:
-        #     freq_string = self.name.split('_')[1]
-        #     for freq in ['yr', 'mon', 'day', '6hr', '3hr', '1hr']:
-        #         if freq in freq_string:
-        #             self.frequency = freq
-        #             break
+        if '_' in self.name:
+            freq_string = self.name.split('_')[1]
+            for freq in ['yr', 'mon', 'day', '6hr', '3hr', '1hr']:
+                if freq in freq_string:
+                    self.frequency = freq
+                    break
 
         # If it's a netCDF file then we can get extra metadata
-        # if self.name.endswith('.nc'):
-        #     logger.debug(f'Getting additional netCDF metadata for {self.name}')
-        #     self._add_netcdf4_metadata()
+        if self.name.endswith('.nc'):
+            self._add_netcdf4_metadata()
 
     def to_django_instance(self, base_url, dataset, username, password):
         """
@@ -306,29 +321,42 @@ class IngestedDatafile:
         """
         Get as much internal metadata as possible using the netCDF4 library.
         """
-        # logger.debug(f"Getting metadata using netCDF4 for {self.name}")
-        # filepath = os.path.join(self.directory, self.name)
-        # with Dataset(filepath) as rootgrp:
-        #     if "time" in rootgrp.dimensions:
-        #         time_dim = rootgrp["time"]
-        #         self.time_units = time_dim.units
-        #         self.calendar = time_dim.calendar
-        #         self.start_time = float(time_dim[:].min())
-        #         self.end_time = float(time_dim[:].max())
-        #
-        #     for variable in rootgrp.variables:
-        #         if variable not in rootgrp.dimensions:
-        #             for var_type in ["var_name", "long_name",
-        #                              "standard_name", "units"]:
-        #                 if var_type in rootgrp[variable].ncattrs():
-        #                     var_value = rootgrp[variable].getncattr(var_type)
-        #                     if var_type == "units":
-        #                         var_value = str(var_value)
-        #                     if not getattr(self, var_type):
-        #                         setattr(self, var_type, var_value)
-        #                     else:
-        #                         setattr(
-        #                             self,
-        #                             var_type,
-        #                             getattr(self, var_type) + ", " + var_value,
-        #                         )
+        logger.debug(f"Getting metadata using netCDF4 for {self.name}")
+        filepath = os.path.join(self.directory, self.name)
+        with Dataset(filepath) as rootgrp:
+            if "time" in rootgrp.dimensions:
+                time_dim = rootgrp["time"]
+                self.time_units = time_dim.units
+                self.calendar = time_dim.calendar
+                self.start_time = float(time_dim[:].min())
+                self.end_time = float(time_dim[:].max())
+
+            for variable in rootgrp.variables:
+                if variable not in rootgrp.dimensions:
+                    for var_type in ["var_name", "long_name",
+                                     "standard_name", "units"]:
+                        if var_type in rootgrp[variable].ncattrs():
+                            var_value = rootgrp[variable].getncattr(var_type)
+                            if var_type == "units":
+                                var_value = str(var_value)
+                            if not getattr(self, var_type):
+                                setattr(self, var_type, var_value)
+                            else:
+                                setattr(
+                                    self,
+                                    var_type,
+                                    getattr(self, var_type) + ", " + var_value,
+                                )
+            logger.debug(f"standard_name {self.standard_name}")
+
+            for dimension in rootgrp.dimensions:
+                if not getattr(self, "dimensions"):
+                    setattr(self, "dimensions", dimension)
+                else:
+                    setattr(
+                        self,
+                        "dimensions",
+                        getattr(self, "dimensions") + ", " + dimension,
+                    )
+            logger.debug(f"dimensions {self.dimensions}")
+

@@ -8,4 +8,17 @@
 Standard vocabularies for the DMT
 """
 
+CALENDARS = [
+    ('standard', 'standard'),
+    ('gregorian', 'gregorian'),
+    ('proleptic_gregorian', 'proleptic_gregorian'),
+    ('noleap', 'noleap'),
+    ('365_day', '365_day'),
+    ('360_day', '360_day'),
+    ('julian', 'julian'),
+    ('all_leap', 'all_leap'),
+    ('366_day', '366_day'),
+]
+
+
 CHECKSUM_TYPES = [("SHA256", "SHA256"), ("MD5", "MD5"), ("ADLER32", "ADLER32")]
