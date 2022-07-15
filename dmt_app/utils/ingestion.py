@@ -281,15 +281,15 @@ class IngestedDatafile:
         self.size = os.path.getsize(filepath)
         self.checksum_value = sha256(filepath)
         self.checksum_type = "SHA256"
-        if '_' in self.name:
-            freq_string = self.name.split('_')[1]
-            for freq in ['yr', 'mon', 'day', '6hr', '3hr', '1hr']:
+        if "_" in self.name:
+            freq_string = self.name.split("_")[1]
+            for freq in ["yr", "mon", "day", "6hr", "3hr", "1hr"]:
                 if freq in freq_string:
                     self.frequency = freq
                     break
 
         # If it's a netCDF file then we can get extra metadata
-        if self.name.endswith('.nc'):
+        if self.name.endswith(".nc"):
             self._add_netcdf4_metadata()
 
     def to_django_instance(self, base_url, dataset, username, password):
@@ -333,8 +333,7 @@ class IngestedDatafile:
 
             for variable in rootgrp.variables:
                 if variable not in rootgrp.dimensions:
-                    for var_type in ["var_name", "long_name",
-                                     "standard_name", "units"]:
+                    for var_type in ["var_name", "long_name", "standard_name", "units"]:
                         if var_type in rootgrp[variable].ncattrs():
                             var_value = rootgrp[variable].getncattr(var_type)
                             if var_type == "units":
@@ -359,4 +358,3 @@ class IngestedDatafile:
                         getattr(self, "dimensions") + ", " + dimension,
                     )
             logger.debug(f"dimensions {self.dimensions}")
-
