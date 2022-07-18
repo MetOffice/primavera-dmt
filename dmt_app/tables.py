@@ -38,10 +38,12 @@ class DataFileTable(tables.Table):
             "checksum_value",
             "checksum_type",
         )
-        sequence = ["name", "directory", "online", "size", "checksum"]
+        sequence = ["name", "directory", "online", "size", "project", "checksum"]
         order_by = "name"
 
     checksum = tables.Column(empty_values=(), verbose_name="Checksum", orderable=False)
+
+    project = tables.Column(empty_values=(), verbose_name="Project", orderable=True)
 
     def render_checksum(self, record):  # pylint: disable=no-self-use
         """Render the checksum nicely"""
@@ -50,6 +52,19 @@ class DataFileTable(tables.Table):
     def render_size(self, value):  # pylint: disable=no-self-use
         """Display the file's size in a human-readable form"""
         return filesizeformat(value)
+
+    def render_project(self, record):  # pylint: disable=no-self-use
+        """Display the parent dataset's project attribute"""
+        if not record.dataset.project:
+            return DEFAULT_VALUE
+        return record.dataset.project
+
+    def order_project(self, queryset, is_descending):  # pylint: disable=no-self-use
+        """Allow the files to be ordered by project"""
+        queryset = queryset.order_by(
+            ("-" if is_descending else "") + "dataset__project"
+        )
+        return (queryset, True)
 
 
 class DataSetTable(tables.Table):
@@ -68,6 +83,7 @@ class DataSetTable(tables.Table):
             "version",
             "num_files",
             "online_status",
+            "project",
             "summary",
             "url",
             "doi",

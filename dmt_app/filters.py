@@ -19,7 +19,7 @@ class DataFileFilter(django_filters.FilterSet):
 
     class Meta:
         model = DataFile
-        fields = ["name", "directory", "dataset", "online"]
+        fields = ["name", "directory", "dataset", "online", "project"]
 
     name = django_filters.CharFilter(field_name="name", lookup_expr="icontains")
 
@@ -28,6 +28,10 @@ class DataFileFilter(django_filters.FilterSet):
     )
 
     dataset = django_filters.NumberFilter(field_name="dataset__id")
+
+    project = django_filters.CharFilter(
+        field_name="dataset__project", lookup_expr="icontains"
+    )
 
     def filter_online(self, queryset, name, value):
         """Allow filtering of online status"""
@@ -45,8 +49,10 @@ class DataSetFilter(django_filters.FilterSet):
 
     class Meta:
         model = DataSet
-        fields = ["name", "version"]
+        fields = ["name", "version", "project"]
 
     name = django_filters.CharFilter(field_name="name", lookup_expr="icontains")
 
     version = django_filters.CharFilter(field_name="version", lookup_expr="icontains")
+
+    project = django_filters.CharFilter(field_name="project", lookup_expr="icontains")

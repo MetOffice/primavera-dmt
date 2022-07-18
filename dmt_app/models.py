@@ -44,6 +44,9 @@ class DataSet(models.Model):
     creator = models.CharField(
         max_length=100, verbose_name="Creator", null=True, blank=True
     )
+    project = models.CharField(
+        max_length=200, verbose_name="Project", null=True, blank=True
+    )
 
     @property
     def online_status(self):

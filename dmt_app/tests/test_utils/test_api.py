@@ -52,6 +52,7 @@ class TestBasicGetApi(TestCase):
             "reference": None,
             "license": None,
             "date_downloaded": None,
+            "project": None,
             "datafile_set": [
                 f"{self.base_url}datafiles/{self.sample_data.datafile1.id}/",
                 f"{self.base_url}datafiles/{self.sample_data.datafile2.id}/",
@@ -78,6 +79,7 @@ class TestBasicGetApi(TestCase):
                     "reference": None,
                     "license": None,
                     "date_downloaded": None,
+                    "project": None,
                     "datafile_set": [
                         f"{self.base_url}datafiles/{self.sample_data.datafile1.id}/",
                         f"{self.base_url}datafiles/{self.sample_data.datafile2.id}/",

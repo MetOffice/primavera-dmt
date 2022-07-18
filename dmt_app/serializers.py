@@ -27,6 +27,7 @@ class DataSetSerializer(serializers.HyperlinkedModelSerializer):
             "reference",
             "license",
             "date_downloaded",
+            "project",
             "datafile_set",
         )
 
