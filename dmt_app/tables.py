@@ -41,11 +41,19 @@ class DataFileTable(tables.Table):
             "standard_name",
             "long_name",
             "var_name",
+            "start_time",
+            "end_time",
         )
         sequence = [
             "name",
             "directory",
             "dataset",
+            "variables",
+            "start_string",
+            "end_string",
+            "frequency",
+            "units",
+            "dimensions",
             "online",
             "size",
             "project",
@@ -54,13 +62,16 @@ class DataFileTable(tables.Table):
         order_by = "name"
 
     dataset = tables.Column(empty_values=(), verbose_name="Data Set", orderable=True)
-
+    variables = tables.Column(empty_values=(), verbose_name="Variables", orderable=True)
     checksum = tables.Column(empty_values=(), verbose_name="Checksum", orderable=False)
-
     project = tables.Column(empty_values=(), verbose_name="Project", orderable=True)
+    start_string = tables.Column(
+        empty_values=(), verbose_name="Starts", orderable=False
+    )
+    end_string = tables.Column(empty_values=(), verbose_name="Ends", orderable=False)
 
     def render_dataset(self, record):  # pylint: disable=no-self-use
-        """Render the parent data set"""
+        """Render the parent data set's name"""
         return f"{record.dataset.name} ({record.dataset.version})"
 
     def order_dataset(self, queryset, is_descending):  # pylint: disable=no-self-use
@@ -70,6 +81,10 @@ class DataFileTable(tables.Table):
             ("-" if is_descending else "") + "dataset__version",
         )
         return (queryset, True)
+
+    def render_variables(self, record):  # pylint: disable=no-self-use
+        """Render the names of the variables in the file"""
+        return record.variable
 
     def render_checksum(self, record):  # pylint: disable=no-self-use
         """Render the checksum nicely"""
@@ -91,6 +106,14 @@ class DataFileTable(tables.Table):
             ("-" if is_descending else "") + "dataset__project"
         )
         return (queryset, True)
+
+    def render_start_string(self, record):  # pylint: disable=no-self-use
+        """Display the start string"""
+        return record.start_string
+
+    def render_end_string(self, record):  # pylint: disable=no-self-use
+        """Display the end string"""
+        return record.end_string
 
 
 class DataSetTable(tables.Table):
