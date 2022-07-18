@@ -344,7 +344,11 @@ class IngestedDatafile:
 
             for variable in rootgrp.variables:
                 if variable not in rootgrp.dimensions:
-                    for var_type in ["var_name", "long_name", "standard_name", "units"]:
+                    if not self.var_name:
+                        self.var_name = variable
+                    else:
+                        self.var_name = f"{self.var_name}, {variable}"
+                    for var_type in ["long_name", "standard_name", "units"]:
                         if var_type in rootgrp[variable].ncattrs():
                             var_value = rootgrp[variable].getncattr(var_type)
                             if var_type == "units":
@@ -357,7 +361,6 @@ class IngestedDatafile:
                                     var_type,
                                     getattr(self, var_type) + ", " + var_value,
                                 )
-            logger.debug(f"standard_name {self.standard_name}")
 
             for dimension in rootgrp.dimensions:
                 if not getattr(self, "dimensions"):
@@ -368,4 +371,3 @@ class IngestedDatafile:
                         "dimensions",
                         getattr(self, "dimensions") + ", " + dimension,
                     )
-            logger.debug(f"dimensions {self.dimensions}")
