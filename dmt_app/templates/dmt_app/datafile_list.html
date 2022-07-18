@@ -5,7 +5,7 @@
     {% block contents %}
 
         <p>
-            {% if request.GET.dataset %}
+            {% if request.GET.dataset_id %}
                 These are the netCDF files for dataset ...
                 <div class="alert alert-dark" role="alert">
                     {{ request.GET.dataset_string }}
@@ -26,6 +26,10 @@
                     <input type="text" class="form-control mb-2 mr-sm-2" name="directory" id="directory" placeholder="Directory" {% if request.GET.directory %} value="{{ request.GET.directory }}" {% endif %}>
                 </div>
                 <div class="form-group">
+                    <label class="sr-only" for="dataset_name">Data Set Name</label>
+                    <input type="text" class="form-control mb-2 mr-sm-2" name="dataset_name" id="dataset_name" placeholder="Data Set Name" {% if request.GET.dataset_name %} value="{{ request.GET.dataset_name }}" {% endif %}>
+                </div>
+                <div class="form-group">
                     <label class="sr-only" for="project">Project</label>
                     <input type="text" class="form-control mb-2 mr-sm-2" name="project" id="project" placeholder="Project" {% if request.GET.project %} value="{{ request.GET.project }}" {% endif %}>
                 </div>
@@ -35,10 +39,10 @@
                         <label class="form-check-label mb-2 mr-sm-2" for="online">Only online</label>
                     </div>
                 </div>
-                {% if request.GET.dataset %}
-                    <input type="hidden" name="dataset" value="{{ request.GET.dataset }}">
+                {% if request.GET.dataset_id %}
+                    <input type="hidden" name="dataset_id" value="{{ request.GET.dataset_id }}">
                     <input type="hidden" name="dataset_string" value="{{ request.GET.dataset_string }}">
-                    <a class="btn btn-outline-dark mb-2 mr-sm-2" href="{% url 'datafiles' %}?dataset={{ request.GET.dataset }}&dataset_string={{ request.GET.dataset_string }}">Clear</a>
+                    <a class="btn btn-outline-dark mb-2 mr-sm-2" href="{% url 'datafiles' %}?dataset_id={{ request.GET.dataset_id }}&dataset_string={{ request.GET.dataset_string }}">Clear</a>
                 {% else %}
                     <a class="btn btn-outline-dark mb-2 mr-sm-2" href="{% url 'datafiles' %}">Clear</a>
                 {% endif %}

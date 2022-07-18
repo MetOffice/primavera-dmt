@@ -19,7 +19,14 @@ class DataFileFilter(django_filters.FilterSet):
 
     class Meta:
         model = DataFile
-        fields = ["name", "directory", "dataset", "online", "project"]
+        fields = [
+            "name",
+            "directory",
+            "dataset_id",
+            "dataset_name",
+            "online",
+            "project",
+        ]
 
     name = django_filters.CharFilter(field_name="name", lookup_expr="icontains")
 
@@ -27,7 +34,11 @@ class DataFileFilter(django_filters.FilterSet):
         field_name="directory", lookup_expr="icontains"
     )
 
-    dataset = django_filters.NumberFilter(field_name="dataset__id")
+    dataset_id = django_filters.NumberFilter(field_name="dataset__id")
+
+    dataset_name = django_filters.CharFilter(
+        field_name="dataset__name", lookup_expr="icontains"
+    )
 
     project = django_filters.CharFilter(
         field_name="dataset__project", lookup_expr="icontains"

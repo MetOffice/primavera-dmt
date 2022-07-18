@@ -34,16 +34,42 @@ class DataFileTable(tables.Table):
         exclude = (
             "id",
             "incoming_directory",
-            "dataset",
             "checksum_value",
             "checksum_type",
+            "time_units",
+            "calendar",
+            "standard_name",
+            "long_name",
+            "var_name",
         )
-        sequence = ["name", "directory", "online", "size", "project", "checksum"]
+        sequence = [
+            "name",
+            "directory",
+            "dataset",
+            "online",
+            "size",
+            "project",
+            "checksum",
+        ]
         order_by = "name"
+
+    dataset = tables.Column(empty_values=(), verbose_name="Data Set", orderable=True)
 
     checksum = tables.Column(empty_values=(), verbose_name="Checksum", orderable=False)
 
     project = tables.Column(empty_values=(), verbose_name="Project", orderable=True)
+
+    def render_dataset(self, record):  # pylint: disable=no-self-use
+        """Render the parent data set"""
+        return f"{record.dataset.name} ({record.dataset.version})"
+
+    def order_dataset(self, queryset, is_descending):  # pylint: disable=no-self-use
+        """Allow the files to be ordered by dataset name then version"""
+        queryset = queryset.order_by(
+            ("-" if is_descending else "") + "dataset__name",
+            ("-" if is_descending else "") + "dataset__version",
+        )
+        return (queryset, True)
 
     def render_checksum(self, record):  # pylint: disable=no-self-use
         """Render the checksum nicely"""
@@ -103,7 +129,7 @@ class DataSetTable(tables.Table):
         num_datafiles = record.datafile_set.count()
         url_query = urlencode(
             {
-                "dataset": record.id,
+                "dataset_id": record.id,
                 "dataset_string": f"{record.name} ({record.version})",
             }
         )
