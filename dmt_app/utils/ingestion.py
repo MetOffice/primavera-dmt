@@ -321,13 +321,24 @@ class IngestedDatafile:
         """
         Get as much internal metadata as possible using the netCDF4 library.
         """
+        # pylint: disable=too-many-branches
         logger.debug(f"Getting metadata using netCDF4 for {self.name}")
         filepath = os.path.join(self.directory, self.name)
         with Dataset(filepath) as rootgrp:
             if "time" in rootgrp.dimensions:
                 time_dim = rootgrp["time"]
-                self.time_units = time_dim.units
-                self.calendar = time_dim.calendar
+                try:
+                    self.time_units = time_dim.units
+                except AttributeError:
+                    logger.warning(f"No units for time dimension in {self.name}")
+                try:
+                    self.calendar = time_dim.calendar
+                except AttributeError:
+                    logger.warning(
+                        f"No calendar for time dimension in {self.name}, "
+                        f"assuming gregorian."
+                    )
+                    self.calendar = "gregorian"
                 self.start_time = float(time_dim[:].min())
                 self.end_time = float(time_dim[:].max())
 
