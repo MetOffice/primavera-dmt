@@ -84,7 +84,9 @@ class DataFileTable(tables.Table):
 
     def render_variables(self, record):  # pylint: disable=no-self-use
         """Render the names of the variables in the file"""
-        return record.variable
+        if record.variable:
+            return record.variable
+        return DEFAULT_VALUE
 
     def render_checksum(self, record):  # pylint: disable=no-self-use
         """Render the checksum nicely"""
@@ -96,9 +98,9 @@ class DataFileTable(tables.Table):
 
     def render_project(self, record):  # pylint: disable=no-self-use
         """Display the parent dataset's project attribute"""
-        if not record.dataset.project:
-            return DEFAULT_VALUE
-        return record.dataset.project
+        if record.dataset.project:
+            return record.dataset.project
+        return DEFAULT_VALUE
 
     def order_project(self, queryset, is_descending):  # pylint: disable=no-self-use
         """Allow the files to be ordered by project"""
@@ -109,11 +111,15 @@ class DataFileTable(tables.Table):
 
     def render_start_string(self, record):  # pylint: disable=no-self-use
         """Display the start string"""
-        return record.start_string
+        if record.start_string:
+            return record.start_string
+        return DEFAULT_VALUE
 
     def render_end_string(self, record):  # pylint: disable=no-self-use
         """Display the end string"""
-        return record.end_string
+        if record.end_string:
+            return record.end_string
+        return DEFAULT_VALUE
 
 
 class DataSetTable(tables.Table):
