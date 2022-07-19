@@ -57,12 +57,17 @@ If you want to contribute to primavera-dmt be sure to review the
    django-admin migrate
    ```
 
-4. Run tests:
+4. Create a superuser so that the admin interface can be used:
+   ```
+   django-admin createsuperuser
+   ```
+
+5. Run tests:
    ```
    django-admin test
    ```
    
-5. View the website in a local development server:
+6. View the website in a local development server:
    In `dmt_site/settings.py` enable debug mode by changing line 24 to:
    ```
    DEBUG = True

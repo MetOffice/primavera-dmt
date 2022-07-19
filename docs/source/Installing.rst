@@ -58,7 +58,7 @@ Adding Users
 
 #. In the subsequent `Change user` page select the ``Staff status`` box and in the `Groups`
    box select the data editor group created during the initial configuration, for example
-   ``data_editor`` and then click on the right arrow to move this into the `Chosen groups`
+   ``data_editor``, and then click on the right arrow to move this into the `Chosen groups`
    column. Finally click on ``Save`` at the bottom of the page.
 
 #. Create a ``~/.config/dmt/dmt.json`` file....
