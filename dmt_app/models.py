@@ -106,19 +106,19 @@ class DataFile(models.Model):
 
     # Details of the variables in the file
     standard_name = models.CharField(
-        max_length=500, null=True, blank=True, verbose_name="Standard name"
+        max_length=2000, null=True, blank=True, verbose_name="Standard name"
     )
     long_name = models.CharField(
-        max_length=500, null=True, blank=True, verbose_name="Long name"
+        max_length=10000, null=True, blank=True, verbose_name="Long name"
     )
     var_name = models.CharField(
-        max_length=200, null=True, blank=True, verbose_name="Var name"
+        max_length=2000, null=True, blank=True, verbose_name="Var name"
     )
     units = models.CharField(
-        max_length=200, null=True, blank=True, verbose_name="Units"
+        max_length=2000, null=True, blank=True, verbose_name="Units"
     )
     dimensions = models.CharField(
-        max_length=200, null=True, blank=True, verbose_name="Dimensions"
+        max_length=2000, null=True, blank=True, verbose_name="Dimensions"
     )
 
     @property
