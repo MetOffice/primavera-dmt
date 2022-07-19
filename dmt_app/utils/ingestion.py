@@ -269,7 +269,7 @@ class IngestedDatafile:
         self.standard_name = None
         self.long_name = None
         self.var_name = None
-        self.units = None
+        self.units = ""
         self.dimensions = None
 
     def add_metadata(self):
@@ -361,6 +361,10 @@ class IngestedDatafile:
                                     var_type,
                                     getattr(self, var_type) + ", " + var_value,
                                 )
+            # Remove duplicate items from units using set comprehension
+            self.units = ", ".join(
+                sorted({item.strip() for item in self.units.split(",")})
+            )
 
             for dimension in rootgrp.dimensions:
                 if not getattr(self, "dimensions"):

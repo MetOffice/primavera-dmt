@@ -147,11 +147,17 @@ class TestIngestion(TestCase):
         self.assertEqual(data_file.dataset.name, "DATASET")
         self.assertEqual(data_file.dataset.version, "V1.0")
         self.assertEqual(data_file.start_string, "2014-12-21")
-        self.assertEqual(data_file.end_string, "2014-12-22")
-        self.assertEqual(data_file.standard_name, "air_potential_temperature")
-        self.assertEqual(data_file.var_name, "air_potential_temperature")
-        self.assertIsNone(data_file.long_name)
-        self.assertEqual(data_file.units, "K")
+        self.assertEqual(data_file.end_string, "2014-12-24")
+        self.assertEqual(
+            data_file.standard_name,
+            "sea_water_salinity, air_temperature, sea_surface_temperature",
+        )
+        self.assertEqual(data_file.var_name, "so, tas, tos")
+        self.assertEqual(
+            data_file.long_name,
+            "Sea Water Salinity, Near-Surface Air Temperature",
+        )
+        self.assertEqual(data_file.units, "0.001, K")
         self.assertIsNone(data_file.frequency)
         self.assertEqual(data_file.dimensions, "time, grid_latitude, grid_longitude")
 
@@ -176,11 +182,17 @@ class TestIngestion(TestCase):
         self.assertEqual(data_file.dataset.name, "DATASET")
         self.assertEqual(data_file.dataset.version, "V1.0")
         self.assertEqual(data_file.start_string, "2014-12-21")
-        self.assertEqual(data_file.end_string, "2014-12-22")
-        self.assertEqual(data_file.standard_name, "air_potential_temperature")
-        self.assertEqual(data_file.var_name, "air_potential_temperature")
-        self.assertIsNone(data_file.long_name)
-        self.assertEqual(data_file.units, "K")
+        self.assertEqual(data_file.end_string, "2014-12-24")
+        self.assertEqual(
+            data_file.standard_name,
+            "sea_water_salinity, air_temperature, sea_surface_temperature",
+        )
+        self.assertEqual(data_file.var_name, "so, tas, tos")
+        self.assertEqual(
+            data_file.long_name,
+            "Sea Water Salinity, Near-Surface Air Temperature",
+        )
+        self.assertEqual(data_file.units, "0.001, K")
         self.assertIsNone(data_file.frequency)
         self.assertEqual(data_file.dimensions, "time, grid_latitude, grid_longitude")
         # Check text file
