@@ -62,7 +62,9 @@ class DataFileTable(tables.Table):
         order_by = "name"
 
     dataset = tables.Column(empty_values=(), verbose_name="Data Set", orderable=True)
-    variables = tables.Column(empty_values=(), verbose_name="Variables", orderable=True)
+    variables = tables.Column(
+        empty_values=(), verbose_name="Variables", orderable=False
+    )
     checksum = tables.Column(empty_values=(), verbose_name="Checksum", orderable=False)
     project = tables.Column(empty_values=(), verbose_name="Project", orderable=True)
     start_string = tables.Column(
@@ -84,8 +86,8 @@ class DataFileTable(tables.Table):
 
     def render_variables(self, record):  # pylint: disable=no-self-use
         """Render the names of the variables in the file"""
-        if record.variable:
-            return record.variable
+        if record.variables:
+            return record.variables
         return DEFAULT_VALUE
 
     def render_checksum(self, record):  # pylint: disable=no-self-use

@@ -26,6 +26,7 @@ class DataFileFilter(django_filters.FilterSet):
             "dataset_name",
             "online",
             "project",
+            "variables",
         ]
 
     name = django_filters.CharFilter(field_name="name", lookup_expr="icontains")
@@ -44,6 +45,8 @@ class DataFileFilter(django_filters.FilterSet):
         field_name="dataset__project", lookup_expr="icontains"
     )
 
+    variables = django_filters.CharFilter(method="filter_variables")
+
     def filter_online(self, queryset, name, value):
         """Allow filtering of online status"""
         # pylint: disable=unused-argument, no-else-return, no-self-use
@@ -51,6 +54,17 @@ class DataFileFilter(django_filters.FilterSet):
             return queryset.filter(online=True)
         else:
             return queryset
+
+    def filter_variables(self, queryset, name, value):
+        """Allow filtering of the three variable components in single filter"""
+        # pylint: disable=unused-argument, no-self-use
+        if not value:
+            return queryset
+        standard_name_qs = queryset.filter(standard_name__icontains=value)
+        long_name_qs = queryset.filter(long_name__icontains=value)
+        var_name_qs = queryset.filter(var_name__icontains=value)
+        # Cannot use union as distinct() is called in table_views.py
+        return standard_name_qs | long_name_qs | var_name_qs
 
 
 class DataSetFilter(django_filters.FilterSet):

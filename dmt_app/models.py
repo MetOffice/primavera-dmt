@@ -122,7 +122,7 @@ class DataFile(models.Model):
     )
 
     @property
-    def variable(self):
+    def variables(self):
         """Most appropriate variable names"""
         # pylint: disable=unused-argument, no-else-return
         if self.standard_name:
