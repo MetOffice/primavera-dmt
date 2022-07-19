@@ -80,7 +80,6 @@ class TestDataSet(TestCase):
         self.assertEqual(str(data_set), "OBS")
 
 
-# TODO when more attributes have been added to the DataFile model then add tests
 class TestDataFile(TestCase):
     """Test the DataFile object"""
 
@@ -94,81 +93,116 @@ class TestDataFile(TestCase):
             "size": 1,
         }
 
-    # def test_variable_standard_name(self):
-    #     data_file = DataFile.objects.create(dataset=self.data_set,
-    #                                          standard_name='cloud_albedo',
-    #                                          long_name='wibble wobble',
-    #                                          **self.basic_file_params)
-    #     data_file.save()
-    #     self.assertEqual(data_file.variable, 'cloud_albedo')
-    #
-    # def test_variable_long_name(self):
-    #     data_file = DataFile.objects.create(dataset=self.data_set,
-    #                                          long_name='wibble wobble',
-    #                                          **self.basic_file_params)
-    #     data_file.save()
-    #     self.assertEqual(data_file.variable, 'wibble wobble')
-    #
-    # def test_variable_var_name(self):
-    #     data_file = DataFile.objects.create(dataset=self.data_set,
-    #                                          var_name='wobble wabble',
-    #                                          **self.basic_file_params)
-    #     data_file.save()
-    #     self.assertEqual(data_file.variable, 'wobble wabble')
-    #
-    # def test_variable_not_specified(self):
-    #     data_file = DataFile.objects.create(dataset=self.data_set,
-    #                                          **self.basic_file_params)
-    #     data_file.save()
-    #     self.assertIsNone(data_file.variable)
-    #
-    # def test_start_string_none(self):
-    #     data_file = DataFile.objects.create(dataset=self.data_set,
-    #                                          **self.basic_file_params)
-    #     data_file.save()
-    #     self.assertIsNone(data_file.start_string)
-    #
-    # def test_start_string_zero(self):
-    #     data_file = DataFile.objects.create(dataset=self.data_set,
-    #                                          start_time=0.0,
-    #                                          calendar='gregorian',
-    #                                          time_units='days since 1950-01-01',
-    #                                          **self.basic_file_params)
-    #     data_file.save()
-    #     self.assertEqual(data_file.start_string, '1950-01-01')
-    #
-    # def test_start_string(self):
-    #     data_file = DataFile.objects.create(dataset=self.data_set,
-    #                                          start_time=364.99,
-    #                                          calendar='gregorian',
-    #                                          time_units='days since 1950-01-01',
-    #                                          **self.basic_file_params)
-    #     data_file.save()
-    #     self.assertEqual(data_file.start_string, '1950-12-31')
-    #
-    # def test_end_string_none(self):
-    #     data_file = DataFile.objects.create(dataset=self.data_set,
-    #                                          **self.basic_file_params)
-    #     data_file.save()
-    #     self.assertIsNone(data_file.end_string)
-    #
-    # def test_end_string_zero(self):
-    #     data_file = DataFile.objects.create(dataset=self.data_set,
-    #                                          end_time=0.0,
-    #                                          calendar='gregorian',
-    #                                          time_units='days since 1950-01-01',
-    #                                          **self.basic_file_params)
-    #     data_file.save()
-    #     self.assertEqual(data_file.end_string, '1950-01-01')
-    #
-    # def test_end_string(self):
-    #     data_file = DataFile.objects.create(dataset=self.data_set,
-    #                                          end_time=181.5,
-    #                                          calendar='gregorian',
-    #                                          time_units='days since 1950-01-01',
-    #                                          **self.basic_file_params)
-    #     data_file.save()
-    #     self.assertEqual(data_file.end_string, '1950-07-01')
+    def test_variable_standard_name(self):
+        data_file = DataFile.objects.create(
+            dataset=self.data_set,
+            standard_name="cloud_albedo",
+            long_name="wibble wobble",
+            **self.basic_file_params
+        )
+        data_file.save()
+        self.assertEqual(data_file.variables, "cloud_albedo")
+
+    def test_variable_long_name(self):
+        data_file = DataFile.objects.create(
+            dataset=self.data_set, long_name="wibble wobble", **self.basic_file_params
+        )
+        data_file.save()
+        self.assertEqual(data_file.variables, "wibble wobble")
+
+    def test_variable_var_name(self):
+        data_file = DataFile.objects.create(
+            dataset=self.data_set, var_name="wobble wabble", **self.basic_file_params
+        )
+        data_file.save()
+        self.assertEqual(data_file.variables, "wobble wabble")
+
+    def test_variable_not_specified(self):
+        data_file = DataFile.objects.create(
+            dataset=self.data_set, **self.basic_file_params
+        )
+        data_file.save()
+        self.assertIsNone(data_file.variables)
+
+    def test_start_string_none(self):
+        data_file = DataFile.objects.create(
+            dataset=self.data_set, **self.basic_file_params
+        )
+        data_file.save()
+        self.assertIsNone(data_file.start_string)
+
+    def test_start_string_zero(self):
+        data_file = DataFile.objects.create(
+            dataset=self.data_set,
+            start_time=0.0,
+            calendar="gregorian",
+            time_units="days since 1950-01-01",
+            **self.basic_file_params
+        )
+        data_file.save()
+        self.assertEqual(data_file.start_string, "1950-01-01")
+
+    def test_start_string(self):
+        data_file = DataFile.objects.create(
+            dataset=self.data_set,
+            start_time=364.99,
+            calendar="gregorian",
+            time_units="days since 1950-01-01",
+            **self.basic_file_params
+        )
+        data_file.save()
+        self.assertEqual(data_file.start_string, "1950-12-31")
+
+    def test_end_string_none(self):
+        data_file = DataFile.objects.create(
+            dataset=self.data_set, **self.basic_file_params
+        )
+        data_file.save()
+        self.assertIsNone(data_file.end_string)
+
+    def test_end_string_zero(self):
+        data_file = DataFile.objects.create(
+            dataset=self.data_set,
+            end_time=0.0,
+            calendar="gregorian",
+            time_units="days since 1950-01-01",
+            **self.basic_file_params
+        )
+        data_file.save()
+        self.assertEqual(data_file.end_string, "1950-01-01")
+
+    def test_end_string(self):
+        data_file = DataFile.objects.create(
+            dataset=self.data_set,
+            end_time=181.5,
+            calendar="gregorian",
+            time_units="days since 1950-01-01",
+            **self.basic_file_params
+        )
+        data_file.save()
+        self.assertEqual(data_file.end_string, "1950-07-01")
+
+    def test_gregorian(self):
+        data_file = DataFile.objects.create(
+            dataset=self.data_set,
+            end_time=60.0,
+            calendar="gregorian",
+            time_units="days since 1950-01-01",
+            **self.basic_file_params
+        )
+        data_file.save()
+        self.assertEqual(data_file.end_string, "1950-03-02")
+
+    def test_360_day(self):
+        data_file = DataFile.objects.create(
+            dataset=self.data_set,
+            end_time=60.0,
+            calendar="360_day",
+            time_units="days since 1950-01-01",
+            **self.basic_file_params
+        )
+        data_file.save()
+        self.assertEqual(data_file.end_string, "1950-03-01")
 
     def test_string(self):
         data_file = DataFile.objects.create(
