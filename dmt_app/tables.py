@@ -170,7 +170,7 @@ class DataSetTable(tables.Table):
 
     def render_date_downloaded(self, value):  # pylint: disable=no-self-use
         """Display the date as DD/MM/YYYY"""
-        if isinstance(value, datetime.datetime):
+        if isinstance(value, datetime.date):
             return value.strftime("%Y-%m-%d")
         return DEFAULT_VALUE
 

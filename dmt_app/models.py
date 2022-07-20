@@ -38,7 +38,7 @@ class DataSet(models.Model):
         max_length=4000, verbose_name="Reference", null=True, blank=True
     )
     license = models.URLField(verbose_name="License", null=True, blank=True)
-    date_downloaded = models.DateTimeField(
+    date_downloaded = models.DateField(
         verbose_name="Date downloaded", null=True, blank=True
     )
     creator = models.CharField(
