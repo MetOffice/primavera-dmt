@@ -134,7 +134,7 @@ class DataSetTable(tables.Table):
 
         model = DataSet
         attrs = {"class": "paleblue"}
-        exclude = ("id", "creator")
+        exclude = ("id", "numerical_version", "creator")
         sequence = [
             "name",
             "version",

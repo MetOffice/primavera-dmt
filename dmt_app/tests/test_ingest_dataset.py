@@ -21,7 +21,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from rest_framework.test import RequestsClient
 
-from dmt_app.models import DataFile
+from dmt_app.models import DataFile, DataSet
 from dmt_app.utils.ingestion import (
     CredentialsFileError,
     DmtCredentials,
@@ -135,7 +135,11 @@ class TestIngestion(TestCase):
             self.test_user_attributes["username"],
             self.test_user_attributes["password"],
         )
-        self.assertEqual(DataFile.objects.count(), 1)
+        # Check data set
+        generated_set = DataSet.objects.get(name="DATASET", version="V1.0")
+        self.assertAlmostEqual(generated_set.numerical_version, 1.0)
+        self.assertEqual(generated_set.creator, self.test_user_attributes["username"])
+        self.assertEqual(generated_set.datafile_set.count(), 1)
         data_file = DataFile.objects.get(name=os.path.basename(self.netcdf_filename))
         self.assertEqual(data_file.incoming_directory, self.dataset_dir)
         self.assertEqual(data_file.directory, self.dataset_dir)
@@ -162,14 +166,18 @@ class TestIngestion(TestCase):
         self.assertEqual(data_file.dimensions, "time, grid_latitude, grid_longitude")
 
     def test_ingestion_all_file_types(self):
-        dataset = IngestedDataset("DATASET", "V1.0", self.dataset_dir)
+        dataset = IngestedDataset("DATASET", "R2007", self.dataset_dir)
         dataset.add_files(only_netcdf=False)
         dataset.to_django_instance(
             "http://testserver/api/",
             self.test_user_attributes["username"],
             self.test_user_attributes["password"],
         )
-        self.assertEqual(DataFile.objects.count(), 2)
+        # Check data set
+        generated_set = DataSet.objects.get(name="DATASET", version="R2007")
+        self.assertAlmostEqual(generated_set.numerical_version, 2007.0)
+        self.assertEqual(generated_set.creator, self.test_user_attributes["username"])
+        self.assertEqual(generated_set.datafile_set.count(), 2)
         # Check netCDF file
         data_file = DataFile.objects.get(name=os.path.basename(self.netcdf_filename))
         self.assertEqual(data_file.incoming_directory, self.dataset_dir)
@@ -180,7 +188,7 @@ class TestIngestion(TestCase):
         self.assertEqual(data_file.size, file_size)
         self.assertTrue(data_file.online)
         self.assertEqual(data_file.dataset.name, "DATASET")
-        self.assertEqual(data_file.dataset.version, "V1.0")
+        self.assertEqual(data_file.dataset.version, "R2007")
         self.assertEqual(data_file.start_string, "2014-12-21")
         self.assertEqual(data_file.end_string, "2014-12-24")
         self.assertEqual(
@@ -203,7 +211,7 @@ class TestIngestion(TestCase):
         self.assertEqual(data_file.size, file_size)
         self.assertTrue(data_file.online)
         self.assertEqual(data_file.dataset.name, "DATASET")
-        self.assertEqual(data_file.dataset.version, "V1.0")
+        self.assertEqual(data_file.dataset.version, "R2007")
 
     def tearDown(self) -> None:
         """Remove temporary files"""

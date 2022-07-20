@@ -29,6 +29,9 @@ class DataSet(models.Model):
         max_length=200, verbose_name="Version", blank=True, null=True
     )
     # Additional optional attributes
+    numerical_version = models.FloatField(
+        verbose_name="Numerical Version", null=True, blank=True
+    )
     url = models.URLField(verbose_name="URL", null=True, blank=True)
     summary = models.CharField(
         max_length=4000, verbose_name="Summary", null=True, blank=True

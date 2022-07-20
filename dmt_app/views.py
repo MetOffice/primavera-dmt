@@ -10,6 +10,8 @@ Django views for the dmt_app
 
 # pylint: disable=too-many-ancestors
 
+import re
+
 from django.shortcuts import render
 from django.conf import settings
 from rest_framework import permissions, viewsets
@@ -65,8 +67,16 @@ class DataSetViewSet(viewsets.ModelViewSet):
     filterset_fields = ["name", "version"]
 
     def perform_create(self, serializer):
-        """Save the username on set creation in the API"""
-        serializer.save(creator=self.request.user.username)
+        """Save derived attributes on set creation in the API"""
+        numerical_version = None
+        version = serializer.validated_data.get("version")
+        if version:
+            matches = re.findall(r"(\d+(?:\.\d+)?)", version)
+            if matches:
+                numerical_version = matches[0]
+        serializer.save(
+            creator=self.request.user.username, numerical_version=numerical_version
+        )
 
 
 class DataFileViewSet(viewsets.ModelViewSet):
