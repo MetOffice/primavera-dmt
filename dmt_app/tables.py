@@ -77,10 +77,10 @@ class DataFileTable(tables.Table):
         return f"{record.dataset.name} ({record.dataset.version})"
 
     def order_dataset(self, queryset, is_descending):  # pylint: disable=no-self-use
-        """Allow the files to be ordered by dataset name then version"""
+        """Allow the files to be ordered by dataset name then numerical version"""
         queryset = queryset.order_by(
             ("-" if is_descending else "") + "dataset__name",
-            ("-" if is_descending else "") + "dataset__version",
+            ("-" if is_descending else "") + "dataset__numerical_version",
         )
         return (queryset, True)
 
@@ -177,3 +177,10 @@ class DataSetTable(tables.Table):
     def render_doi(self, value):  # pylint: disable=no-self-use
         """Render the DOI as a working hyperlink"""
         return format_html(f'<a href="https://doi.org/{value}">{value}</a>')
+
+    def order_version(self, queryset, is_descending):  # pylint: disable=no-self-use
+        """Allow the files to be ordered by numerical version"""
+        queryset = queryset.order_by(
+            ("-" if is_descending else "") + "numerical_version",
+        )
+        return (queryset, True)
