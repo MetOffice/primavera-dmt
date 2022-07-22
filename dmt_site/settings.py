@@ -137,5 +137,9 @@ REST_FRAMEWORK = {
     "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"]
 }
 
+# The default text that appears on each web page's title bar
+# This can be over ridden in local_settings.py
+TITLE_BAR_TEXT = "Data Management Tool"
+
 # pylint: disable=wildcard-import, wrong-import-position, unused-wildcard-import
 from .local_settings import *  # noqa

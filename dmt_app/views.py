@@ -31,6 +31,7 @@ class DataFileList(PagedFilteredTableView):
     table_class = DataFileTable
     filter_class = DataFileFilter
     page_title = "Data Files"
+    title_bar_text = settings.TITLE_BAR_TEXT
 
 
 class DataSetList(PagedFilteredTableView):
@@ -40,12 +41,19 @@ class DataSetList(PagedFilteredTableView):
     table_class = DataSetTable
     filter_class = DataSetFilter
     page_title = "Data Sets"
+    title_bar_text = settings.TITLE_BAR_TEXT
 
 
 def view_home(request):
     """Show the home page"""
     return render(
-        request, "dmt_app/home.html", {"request": request, "page_title": "DMT"}
+        request,
+        "dmt_app/home.html",
+        {
+            "request": request,
+            "page_title": "DMT",
+            "title_bar_text": settings.TITLE_BAR_TEXT,
+        },
     )
 
 

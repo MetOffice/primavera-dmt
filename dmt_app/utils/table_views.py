@@ -20,6 +20,7 @@ class PagedFilteredTableView(SingleTableView):
     filter_class = None
     context_filter_name = "filter"
     page_title = None
+    title_bar_text = None
 
     def get_queryset(self, **kwargs):
         qs = super(PagedFilteredTableView, self).get_queryset()
@@ -31,4 +32,5 @@ class PagedFilteredTableView(SingleTableView):
         context = super(PagedFilteredTableView, self).get_context_data()
         context[self.context_filter_name] = self.filter
         context["page_title"] = self.page_title
+        context["title_bar_text"] = self.title_bar_text
         return context

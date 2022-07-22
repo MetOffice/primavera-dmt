@@ -1,6 +1,6 @@
 # (C) Crown Copyright, Met Office. All rights reserved.
 #
-# This file is part of cube_helper and is released under the
+# This file is part of primavera-dmt and is released under the
 # BSD 3-Clause license.
 # See LICENSE in the root of the repository for full licensing details.
 
@@ -29,6 +29,10 @@ from pathlib import Path
 #
 # sys.modules["sqlite3"] = sys.modules.pop("pysqlite3")
 # /Sqlite3
+
+# Override the default text that appears on each web page's title bar
+TITLE_BAR_TEXT = "Data Management Tool"
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
