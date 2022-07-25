@@ -1,0 +1,25 @@
+{% extends "dmt_app/base.html" %}
+{% load static %}
+
+    {% block contents %}
+        <p>
+            This is the Data Management Tool (DMT) to track data files.
+        </p>
+
+        <p>To query the data that is available:</p>
+
+        <ul>
+          <li><a href="{% url 'datasets' %}">Data Sets</a></li>
+          <li><a href="{% url 'datafiles' %}">Data Files</a></li>
+        </ul>
+
+        <p>To browse the API:</p>
+
+        <ul>
+            <li><a href="/api/">RESTful API</a></li>
+        </ul>
+
+
+        <p>Please note that all times in this system are in UTC.</p>
+
+    {% endblock %}

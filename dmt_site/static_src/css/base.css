@@ -1,0 +1,21 @@
+body {
+    margin: 20px;
+    padding-top: 70px; }
+}
+
+a {
+    text-decoration: none;
+}
+
+.truncate-ellipsis {
+    display: table;
+    table-layout: fixed;
+    width: 100%;
+    white-space: nowrap;
+}
+
+.truncate-ellipsis > * {
+    display: table-cell;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
