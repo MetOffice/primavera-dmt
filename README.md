@@ -1,7 +1,7 @@
 [![django_tests](https://github.com/MetOffice/primavera-dmt/actions/workflows/django_test.yml/badge.svg)](https://github.com/MetOffice/primavera-dmt/actions/workflows/django_test.yml)
 [![security: bandit](https://img.shields.io/badge/security-bandit-yellow.svg)](https://github.com/PyCQA/bandit)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-![Licence](https://img.shields.io/github/license/MetOffice/primavera-dmt) 
+[![License](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 
 # primavera-dmt
 PRIMAVERA Data Management Tool
