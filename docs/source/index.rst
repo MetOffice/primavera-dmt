@@ -7,15 +7,18 @@ primavera_dmt
 =============
 
 A Python and Django based Data Management Tool (DMT) and catalogue developed from
-https://github.com/PRIMAVERA-H2020/primavera-dmt.
+https://github.com/PRIMAVERA-H2020/primavera-dmt. It allows collections of files
+to be catalogued and searched from a web based interface and a RESTful API.
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
+   Using
+   API
+   Data_Ingestion
    Installing
    Developing
-   API
    Contributing
    License
 

@@ -21,6 +21,7 @@ If you want to contribute to primavera-dmt be sure to review the
 1. Load a Conda or virtualenv environment containing:   
    ```  
    argon2-cffi
+   cftime
    django  
    django-filter  
    django-tables2
@@ -43,7 +44,7 @@ If you want to contribute to primavera-dmt be sure to review the
    ```  
    cp dmt_site/local_settings.py.tmpl dmt_site/local_settings.py  
     ``` 
-   Populate the value of `SECRET_KEY` on line 43 of `dmt_site/local_settings.py`
+   Populate the value of `SECRET_KEY` in `dmt_site/local_settings.py`
    with a suitable random string. A string can be generated from the command line:
    ```
    $ python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'
@@ -68,7 +69,7 @@ If you want to contribute to primavera-dmt be sure to review the
    ```
    
 6. View the website in a local development server:
-   In `dmt_site/settings.py` enable debug mode by changing line 24 to:
+   In `dmt_site/settings.py` enable debug mode by changing setting `DEBUG` to:
    ```
    DEBUG = True
    ```

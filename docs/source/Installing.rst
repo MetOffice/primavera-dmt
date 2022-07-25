@@ -9,6 +9,19 @@ the :doc:`Developing`. This process is often automated using
 `Ansible playbooks <https://www.ansible.com/>`_, for example
 https://github.com/cedadev/ansible-cedatest.
 
+Configuring
+===========
+
+All site specific configuration is stored in the ``dmt_site/local_settings.py`` file and
+there is an example of this in the ``local_settings.py.tmpl`` file in the same directory.
+
+HTTPS
+=====
+
+Admin users' credentials are transmitted by the API when ingesting data into the DMT. It
+is highly recommended that the DMT is served using a web server using the HTTPS rather
+than the HTTP protocol to protect these credentials.
+
 Admin Interface
 ===============
 
@@ -49,19 +62,21 @@ do this are:
    and then click on the right arrow to move these into the `Chosen permissions` column and
    then click on ``Save``.
 
-Adding Users
-============
+Adding Staff Users
+==================
 
 #. In the Admin interface at ``https://<server-name>/admin/`` navigate to
    ``Authentication and Authorization`` and then ``Users`` and then click on
-   ``Add``. Enter an appropriate username and password and then click on ``Save``.
+   ``Add``. Enter an appropriate username and password and then click on ``Save``. The
+   passwords are salted and encrypted when stored in the DMT's database but a strong and
+   unique password should be used for the DMT, which is not used for any other system.
 
 #. In the subsequent `Change user` page select the ``Staff status`` box and in the `Groups`
    box select the data editor group created during the initial configuration, for example
    ``data_editor``, and then click on the right arrow to move this into the `Chosen groups`
    column. Finally click on ``Save`` at the bottom of the page.
 
-#. Create a ``~/.config/dmt/dmt.json`` file....
+#. Create a ``~/.config/dmt/dmt.json`` file as described in :doc:`Data_Ingestion`.
 
 
 
