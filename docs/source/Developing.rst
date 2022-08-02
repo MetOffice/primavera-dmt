@@ -25,6 +25,9 @@ Quick set-up
     . ../venvs/django/Scripts/activate
     pip install -r requirements.txt
 
+   `psycopg2` is included in `requirements.txt` as it is needed in the production
+   version where a PostgreSQL database is used rather than SQLite.
+
 
 #. Create local settings::
 
