@@ -6,7 +6,7 @@ django-tables2
 djangorestframework
 numpy
 netCDF4
-psycopg2
+psycopg2-binary
 requests
 # Uncomment the next pysqlite3-binary line if the system sqlite is not recent enough for Django
 # pysqlite3-binary
