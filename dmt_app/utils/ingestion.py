@@ -181,7 +181,9 @@ class IngestedDataset:
             json_attributes[attr] = getattr(self, attr)
 
         url = f"{base_url}datasets/"
-        response = requests.post(url, json=json_attributes, auth=(username, password))
+        response = requests.post(
+            url, json=json_attributes, auth=(username, password), timeout=5.0
+        )
         if response.status_code != requests.codes.created:  # pylint: disable=no-member
             msg = (
                 f"{response.status_code} ({responses[response.status_code]}) "
@@ -192,7 +194,7 @@ class IngestedDataset:
 
         # Get the URL of dataset in the API
         query_params = {attr: getattr(self, attr) for attr in self.django_attributes}
-        request = requests.get(f"{base_url}datasets/", params=query_params)
+        request = requests.get(f"{base_url}datasets/", params=query_params, timeout=5.0)
         if request.status_code != requests.codes.ok:  # pylint: disable=no-member
             msg = (
                 f"{request.status_code} ({responses[request.status_code]}) "
@@ -308,7 +310,9 @@ class IngestedDatafile:
         json_attributes["dataset"] = dataset
 
         url = f"{base_url}datafiles/"
-        response = requests.post(url, json=json_attributes, auth=(username, password))
+        response = requests.post(
+            url, json=json_attributes, auth=(username, password), timeout=5.0
+        )
         if response.status_code != requests.codes.created:  # pylint: disable=no-member
             msg = (
                 f"{response.status_code} ({responses[response.status_code]}) "
