@@ -16,6 +16,10 @@ If you want to contribute to primavera-dmt be sure to review the
 ## License
 [BSD-3 License](https://github.com/MetOffice/primavera-dmt/blob/master/LICENSE)
 
+## Documentation
+The documentation is included in the repository and available from https://metoffice.github.io/primavera-dmt/.
+
+
 ## Quick set-up
 
 1. Load a Conda or virtualenv environment containing:   
