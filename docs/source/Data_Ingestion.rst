@@ -84,6 +84,26 @@ during the ingestion process. Additional metadata can be added and edited by sup
 using the admin interface at ``https://<server-name>/admin/dmt_app/dataset/`` and then
 clicking on the appropriate data set's name.
 
+The following metadata items can be added:
+
++-----------------+----------+
+| Name            | Type     |
++=================+==========+
+| URL             | URL      |
++-----------------+----------+
+| Summary         | String   |
++-----------------+----------+
+| DOI             | String   |
++-----------------+----------+
+| Reference       | String   |
++-----------------+----------+
+| License         | URL      |
++-----------------+----------+
+| Date downloaded | Datetime |
++-----------------+----------+
+| Project         | String   |
++-----------------+----------+
+
 Authentication
 ==============
 
