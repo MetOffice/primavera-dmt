@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Developers’ Instructions &mdash; primavera_dmt 1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Contributing" href="Contributing.html" />
+    <link rel="prev" title="Installing and Configuring" href="Installing.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> primavera_dmt
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Using.html">Using the web interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="API.html">RESTful API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data_Ingestion.html">Ingesting files into the DMT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installing.html">Installing and Configuring</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Developers’ Instructions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#quick-set-up">Quick set-up</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#test-environment">Test Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#continuous-integration">Continuous Integration</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="License.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">primavera_dmt</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">Developers’ Instructions</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/Developing.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="developers-instructions">
+<h1>Developers’ Instructions<a class="headerlink" href="#developers-instructions" title="Permalink to this heading"></a></h1>
+<section id="quick-set-up">
+<h2>Quick set-up<a class="headerlink" href="#quick-set-up" title="Permalink to this heading"></a></h2>
+<ol class="arabic">
+<li><p>Load a Conda or virtualenv environment containing:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>argon2-cffi
+cftime
+django
+django-filter
+django-tables2
+djangorestframework
+numpy
+netCDF4
+requests
+</pre></div>
+</div>
+<p>For example in a Python virtual environment:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>mkdir ../venvs
+python3 -m venv ../venvs/django --system-site-packages
+. ../venvs/django/Scripts/activate
+pip install -r requirements.txt
+</pre></div>
+</div>
+<p><cite>psycopg2</cite> is included in <cite>requirements.txt</cite> as it is needed in the production
+version where a PostgreSQL database is used rather than SQLite.</p>
+</li>
+<li><p>Create local settings:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cp dmt_site/local_settings.py.tmpl dmt_site/local_settings.py
+</pre></div>
+</div>
+<p>Populate the value of <code class="docutils literal notranslate"><span class="pre">SECRET_KEY</span></code> in <code class="docutils literal notranslate"><span class="pre">dmt_site/local_settings.py</span></code>
+with a suitable random string. A string can be generated from the command line:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ python -c &#39;from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())&#39;
+</pre></div>
+</div>
+</li>
+<li><p>Django set-up and create databases:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>export DJANGO_SETTINGS_MODULE=dmt_site.settings
+export PYTHONPATH=.
+django-admin makemigrations dmt_app
+django-admin migrate
+</pre></div>
+</div>
+</li>
+<li><p>Create a superuser so that the admin interface can be used:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>django-admin createsuperuser
+</pre></div>
+</div>
+</li>
+<li><p>Run tests:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>django-admin test
+</pre></div>
+</div>
+</li>
+<li><p>View the website in a local development server:
+In <cite>dmt_site/settings.py</cite> enable debug mode by setting <code class="docutils literal notranslate"><span class="pre">DEBUG</span></code> to:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>DEBUG = True
+</pre></div>
+</div>
+<p>Start the development server:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>django-admin runserver
+</pre></div>
+</div>
+<p>Point your browser at <a class="reference external" href="http://localhost:8000/">http://localhost:8000/</a> to view the site.</p>
+</li>
+</ol>
+</section>
+<section id="test-environment">
+<h2>Test Environment<a class="headerlink" href="#test-environment" title="Permalink to this heading"></a></h2>
+<p>Running the unit tests requires the ncgen utility to be installed. For the GitHub Actions
+continuous integration tests it is installed with the following commands:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>sudo apt-get update
+sudo apt-get install netcdf-bin
+</pre></div>
+</div>
+<p>ncgen is commonly installed on many scientific Linux system.</p>
+</section>
+<section id="continuous-integration">
+<h2>Continuous Integration<a class="headerlink" href="#continuous-integration" title="Permalink to this heading"></a></h2>
+<p>GitHub Actions runs seven tests on every commit to a pull request to ensure code
+quality. This number of tests may seem excessive but experience has shown that each
+spots different issues with the code and this number provides a higher level of
+reassurance in the code’s quality. It may be worth running black locally and then
+monitoring the output from GitHub Actions to find any issues that need to be fixed,
+although all of the tests can be installed and run locally too.</p>
+<p>The tests that are run are:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 36%" />
+<col style="width: 48%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Test type</p></th>
+<th class="head"><p>Why?</p></th>
+<th class="head"><p>How?</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Django Tests</p></td>
+<td><p>Run the unit tests</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">django-admin</span> <span class="pre">test</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Black</p></td>
+<td><p>Ensure consistent formatting</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">black</span> <span class="pre">--check</span> <span class="pre">.</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Pylint</p></td>
+<td><p>Code quality</p></td>
+<td><p>[see below]</p></td>
+</tr>
+<tr class="row-odd"><td><p>Flake8</p></td>
+<td><p>Style checking</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">flake8</span> <span class="pre">.</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Pycodestyle</p></td>
+<td><p>Style checking</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">pycodestyle</span> <span class="pre">--max-line-length=88</span> <span class="pre">.</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Docs build</p></td>
+<td><p>Check docs build</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">html</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Bandit</p></td>
+<td><p>Security issues</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">bandit</span> <span class="pre">-r</span> <span class="pre">.</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<p>Pylint has to be run four times, once in each directory:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pylint dmt_app
+pylint dmt_site
+pylint bin
+pylint docs/source/conf.py
+</pre></div>
+</div>
+<p>There are configuration files in the root of the repository that configure Flake8 and
+Pylint.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Installing.html" class="btn btn-neutral float-left" title="Installing and Configuring" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Contributing.html" class="btn btn-neutral float-right" title="Contributing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Met Office.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

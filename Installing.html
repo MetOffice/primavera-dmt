@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Installing and Configuring &mdash; primavera_dmt 1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Developers’ Instructions" href="Developing.html" />
+    <link rel="prev" title="Ingesting files into the DMT" href="Data_Ingestion.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> primavera_dmt
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Using.html">Using the web interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="API.html">RESTful API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data_Ingestion.html">Ingesting files into the DMT</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installing and Configuring</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#configuring">Configuring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#https">HTTPS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#admin-interface">Admin Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#initial-admin-interface-configuration">Initial Admin Interface Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#adding-staff-users">Adding Staff Users</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Developing.html">Developers’ Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="License.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">primavera_dmt</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">Installing and Configuring</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/Installing.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="installing-and-configuring">
+<h1>Installing and Configuring<a class="headerlink" href="#installing-and-configuring" title="Permalink to this heading"></a></h1>
+<p><cite>primavera_dmt</cite> is available from <a class="reference external" href="https://github.com/MetOffice/primavera_dmt">https://github.com/MetOffice/primavera_dmt</a></p>
+<p>Installation on a server can be achieved in a similar way to the method described in
+the <a class="reference internal" href="Developing.html"><span class="doc">Developers’ Instructions</span></a>. This process is often automated using
+<a class="reference external" href="https://www.ansible.com/">Ansible playbooks</a>, for example
+<a class="reference external" href="https://github.com/cedadev/ansible-cedatest">https://github.com/cedadev/ansible-cedatest</a>.</p>
+<section id="configuring">
+<h2>Configuring<a class="headerlink" href="#configuring" title="Permalink to this heading"></a></h2>
+<p>All site specific configuration is stored in the <code class="docutils literal notranslate"><span class="pre">dmt_site/local_settings.py</span></code> file and
+there is an example of this in the <code class="docutils literal notranslate"><span class="pre">local_settings.py.tmpl</span></code> file in the same directory.</p>
+</section>
+<section id="https">
+<h2>HTTPS<a class="headerlink" href="#https" title="Permalink to this heading"></a></h2>
+<p>Admin users’ credentials are transmitted by the API when ingesting data into the DMT. It
+is highly recommended that the DMT is served using a web server using the HTTPS rather
+than the HTTP protocol to protect these credentials.</p>
+</section>
+<section id="admin-interface">
+<h2>Admin Interface<a class="headerlink" href="#admin-interface" title="Permalink to this heading"></a></h2>
+<p>The Django Admin interface provides a convenient way for authorised users to add and
+edit metadata on ingested data. By default users don’t have access to the Admin interface
+until they have been given <cite>Staff</cite> access by a <cite>Superuser</cite>. Once granted <cite>Staff</cite> access
+then additional permissions need to be granted to allow them to edit and view specified
+data objects.</p>
+</section>
+<section id="initial-admin-interface-configuration">
+<h2>Initial Admin Interface Configuration<a class="headerlink" href="#initial-admin-interface-configuration" title="Permalink to this heading"></a></h2>
+<p>The setup of users, groups and the necessary permissions in the Admin interface has not
+been automated and needs to be done manually once for each installation. The steps to
+do this are:</p>
+<ol class="arabic">
+<li><p>If not only done during the initial installation, create a superuser:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>django-admin createsuperuser
+</pre></div>
+</div>
+</li>
+<li><p>In a browser open the admin interface at  <code class="docutils literal notranslate"><span class="pre">https://&lt;server-name&gt;/admin/</span></code> and login as the
+superuser that was just created.</p></li>
+<li><p>Navigate to <code class="docutils literal notranslate"><span class="pre">Authentication</span> <span class="pre">and</span> <span class="pre">Authorization</span></code> and then <code class="docutils literal notranslate"><span class="pre">Groups</span></code> and then click on
+<code class="docutils literal notranslate"><span class="pre">Add</span></code>.</p></li>
+<li><p>Enter a suitable name, such as <cite>data_editor</cite> and then select the eight permissions:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>dmt_app | Data File | Can add Data File
+dmt_app | Data File | Can change Data File
+dmt_app | Data File | Can delete Data File
+dmt_app | Data File | Can view Data File
+dmt_app | Dataset | Can add Dataset
+dmt_app | Dataset | Can change Dataset
+dmt_app | Dataset | Can delete Dataset
+dmt_app | Dataset | Can view Dataset
+</pre></div>
+</div>
+<p>and then click on the right arrow to move these into the <cite>Chosen permissions</cite> column and
+then click on <code class="docutils literal notranslate"><span class="pre">Save</span></code>.</p>
+</li>
+</ol>
+</section>
+<section id="adding-staff-users">
+<h2>Adding Staff Users<a class="headerlink" href="#adding-staff-users" title="Permalink to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>In the Admin interface at <code class="docutils literal notranslate"><span class="pre">https://&lt;server-name&gt;/admin/</span></code> navigate to
+<code class="docutils literal notranslate"><span class="pre">Authentication</span> <span class="pre">and</span> <span class="pre">Authorization</span></code> and then <code class="docutils literal notranslate"><span class="pre">Users</span></code> and then click on
+<code class="docutils literal notranslate"><span class="pre">Add</span></code>. Enter an appropriate username and password and then click on <code class="docutils literal notranslate"><span class="pre">Save</span></code>. The
+passwords are salted and encrypted when stored in the DMT’s database but a strong and
+unique password should be used for the DMT, which is not used for any other system.</p></li>
+<li><p>In the subsequent <cite>Change user</cite> page select the <code class="docutils literal notranslate"><span class="pre">Staff</span> <span class="pre">status</span></code> box and in the <cite>Groups</cite>
+box select the data editor group created during the initial configuration, for example
+<code class="docutils literal notranslate"><span class="pre">data_editor</span></code>, and then click on the right arrow to move this into the <cite>Chosen groups</cite>
+column. Finally click on <code class="docutils literal notranslate"><span class="pre">Save</span></code> at the bottom of the page.</p></li>
+<li><p>Create a <code class="docutils literal notranslate"><span class="pre">~/.config/dmt/dmt.json</span></code> file as described in <a class="reference internal" href="Data_Ingestion.html"><span class="doc">Ingesting files into the DMT</span></a>.</p></li>
+</ol>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Data_Ingestion.html" class="btn btn-neutral float-left" title="Ingesting files into the DMT" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Developing.html" class="btn btn-neutral float-right" title="Developers’ Instructions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Met Office.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

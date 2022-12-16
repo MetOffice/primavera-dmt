@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Using the web interface &mdash; primavera_dmt 1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="RESTful API" href="API.html" />
+    <link rel="prev" title="primavera_dmt" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> primavera_dmt
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Using the web interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="API.html">RESTful API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data_Ingestion.html">Ingesting files into the DMT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installing.html">Installing and Configuring</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Developing.html">Developers’ Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="License.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">primavera_dmt</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">Using the web interface</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/Using.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="using-the-web-interface">
+<h1>Using the web interface<a class="headerlink" href="#using-the-web-interface" title="Permalink to this heading"></a></h1>
+<p>The Data Management Tool (DMT) contains two fundamental data entities:</p>
+<dl class="simple">
+<dt>Data Sets</dt><dd><p>Collections of data files that are combined together with metadata such as the
+license that the data is available under, a summary, a reference and a DOI.
+This metadata is manually added to each data set by DMT administrators.</p>
+</dd>
+<dt>Data Files</dt><dd><p>Individual files make up a data set. Details of each file such as its name, path,
+size and checksum are recorded. Additional, metadata is available for netCDF files
+such as its variables, dimensions, units and start and end times.</p>
+</dd>
+</dl>
+<p>Table views of data sets and data files are linked from the DMT’s front page and
+also from the drop down menu in the title bar.</p>
+<p>On each page there are text boxes to filter the entities using various common
+metadata attributes. To filter entities, enter text into one or more text boxes and then
+click the <cite>Filter</cite> button. Clicking the <cite>Clear</cite> button clears all of the search terms
+and shows all rows again. All search terms are case insensitive and match on values
+that contain the search term (as opposed to being an exact match).</p>
+<p>The order of entities in the tables can be sorted by clicking
+on the arrow in the column headers. Clicking on an arrow a second time will reverse the
+sort order. Due to limitations in how metadata is stored in the DMT’s database, it is not
+possible to order some columns.</p>
+<p>In the Data Sets view, clicking on the number in the <cite># Data Files</cite> column will take you
+to page that shows just the data files for that data set.</p>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="primavera_dmt" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="API.html" class="btn btn-neutral float-right" title="RESTful API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Met Office.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
