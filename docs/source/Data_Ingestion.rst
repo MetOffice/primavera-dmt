@@ -115,7 +115,7 @@ permission for just the owner) or else the ingest tool will not run. The structu
 this credentials file is::
 
     {
-        "url": "http://<server name>/api/",
+        "url": "https://<server name>/api/",
         "username": "<username>",
         "password": "<password>"
     }
