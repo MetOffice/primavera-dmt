@@ -226,24 +226,26 @@ Pylint.</p>
 <a class="reference external" href="https://metoffice.github.io/primavera-dmt/">https://metoffice.github.io/primavera-dmt/</a> using <a class="reference external" href="https://pages.github.com/">GitHub Pages</a>.
 <cite>gh-pages</cite> is not a branch in the traditional sense of Git branches as it does not contain
 any of the contents of the <cite>main</cite> branch, just a copy of the built HTML documentation.</p>
-<p>To update the documentation:</p>
-<p>#. In the <cite>main</cite> branch, or preferably a branch of <cite>main</cite>, make the changes that you
-require to the files in the <cite>docs/</cite> directory.</p>
-<p>#. Build the documentation by opening a Python environment that contains
+<p>Changes to the documentation can be published with the following steps.</p>
+<ol class="arabic">
+<li><p>In the <cite>main</cite> branch, or preferably a branch of <cite>main</cite>, make the changes that you
+require to the files in the <cite>docs/</cite> directory.</p></li>
+<li><p>Build the documentation by opening a Python environment that contains
 <a class="reference external" href="https://www.sphinx-doc.org/">Sphinx</a> and then type:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cd docs
 make clean &amp;&amp; make html
 </pre></div>
 </div>
-<p>#. Check the local copy of the documentation (Firefox is used here but any
+</li>
+<li><p>Check the local copy of the documentation (Firefox is used here but any
 browser is acceptable):</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>firefox build/html/index.html
 </pre></div>
 </div>
-<p>#. When happy with your changes, follow your usual workflow to commit this change
-to the main branch.</p>
-<ol class="arabic">
-<li><p>Create a new clone of the repository and branch <cite>gh-pages</cite>:</p>
+</li>
+<li><p>When happy with your changes, follow your usual workflow to commit this change
+to the main branch.</p></li>
+<li><p>Create a new clone of the repository and branch the <cite>gh-pages</cite> branch:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cd ../..
 git clone git@github.com:MetOffice/primavera-dmt.git primavera-dmt-pages
 cd primavera-dmt-pages
@@ -252,8 +254,7 @@ git checkout my-new-doc-version
 </pre></div>
 </div>
 </li>
-</ol>
-<p>#. Copy the new built documentation into the branch, commit and push to the
+<li><p>Copy the new built documentation into the branch, commit and push to the
 repository:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cp -R ../primavera-dmt/docs/build/html/* .
 git status
@@ -261,10 +262,12 @@ git commit -am &#39;My new documentation version&#39;
 git push origin my-new-doc-version
 </pre></div>
 </div>
-<p>#. Create a new pull request at <a class="reference external" href="https://github.com/MetOffice/primavera-dmt/compare">https://github.com/MetOffice/primavera-dmt/compare</a>
+</li>
+<li><p>Create a new pull request at <a class="reference external" href="https://github.com/MetOffice/primavera-dmt/compare">https://github.com/MetOffice/primavera-dmt/compare</a>
 and ensure that you are committing your <cite>my-new-doc-version</cite> branch into the <cite>gh-pages</cite>
 branch. Review the pull request, merge and then check the result at
-<a class="reference external" href="https://metoffice.github.io/primavera-dmt/">https://metoffice.github.io/primavera-dmt/</a>.</p>
+<a class="reference external" href="https://metoffice.github.io/primavera-dmt/">https://metoffice.github.io/primavera-dmt/</a>.</p></li>
+</ol>
 </section>
 </section>
 
