@@ -2,7 +2,7 @@
 Installing and Configuring
 ==========================
 
-`primavera_dmt` is available from https://github.com/MetOffice/primavera_dmt
+`primavera-dmt` is available from https://github.com/MetOffice/primavera-dmt
 
 Installation on a server can be achieved in a similar way to the method described in
 the :doc:`Developing`. This process is often automated using
