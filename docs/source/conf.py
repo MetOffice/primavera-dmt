@@ -26,8 +26,8 @@
 
 # -- Project information -----------------------------------------------------
 
-project = "primavera_dmt"
-copyright = "2022, Met Office"  # pylint: disable=redefined-builtin
+project = "primavera-dmt"
+copyright = "2023, Met Office"  # pylint: disable=redefined-builtin
 author = "Met Office"
 
 # The full version, including alpha/beta/rc tags

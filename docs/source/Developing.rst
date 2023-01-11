@@ -114,3 +114,51 @@ Pylint has to be run four times, once in each directory::
 
 There are configuration files in the root of the repository that configure Flake8 and
 Pylint.
+
+Documentation
+=============
+
+The documentation is stored in the `gh-pages` branch of the repository and served at 
+https://metoffice.github.io/primavera-dmt/ using `GitHub Pages <https://pages.github.com/>`_. 
+`gh-pages` is not a branch in the traditional sense of Git branches as it does not contain
+any of the contents of the `main` branch, just a copy of the built HTML documentation.
+
+Changes to the documentation can be published with the following steps.
+
+#. In the `main` branch, or preferably a branch of `main`, make the changes that you
+   require to the files in the `docs/` directory.
+
+#. Build the documentation by opening a Python environment that contains 
+   `Sphinx <https://www.sphinx-doc.org/>`_ and then type::
+
+    cd docs
+    make clean && make html
+
+#. Check the local copy of the documentation (Firefox is used here but any 
+   browser is acceptable)::
+    
+    firefox build/html/index.html
+
+#. When happy with your changes, follow your usual workflow to commit this change 
+   to the main branch.
+
+#. Create a new clone of the repository and branch the `gh-pages` branch::
+
+    cd ../..
+    git clone git@github.com:MetOffice/primavera-dmt.git primavera-dmt-pages
+    cd primavera-dmt-pages
+    git branch my-new-doc-version origin/gh-pages
+    git checkout my-new-doc-version
+
+#. Copy the new built documentation into the branch, commit and push to the 
+   repository::
+
+    cp -R ../primavera-dmt/docs/build/html/* .
+    git status
+    git commit -am 'My new documentation version'
+    git push origin my-new-doc-version
+
+#. Create a new pull request at https://github.com/MetOffice/primavera-dmt/compare
+   and ensure that you are committing your `my-new-doc-version` branch into the `gh-pages`
+   branch. Review the pull request, merge and then check the result at 
+   https://metoffice.github.io/primavera-dmt/.
