@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("dmt_app", "0003_alter_dataset_date_downloaded"),
     ]
