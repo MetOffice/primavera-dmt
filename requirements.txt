@@ -5,7 +5,8 @@ django-filter
 django-tables2
 djangorestframework
 numpy
-netCDF4
+# netCDF4 1.6.5 gives an HDF5 error when installing and so should be avoided
+netCDF4 != 1.6.5
 psycopg2
 requests
 # Uncomment the next pysqlite3-binary line if the system sqlite is not recent enough for Django
