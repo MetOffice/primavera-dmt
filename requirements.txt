@@ -2,7 +2,8 @@ argon2-cffi
 cftime
 Django
 django-filter
-django-tables2
+# Python 3.7 only works with django-tables2 upto 2.7.0
+django-tables2 == 2.7.0
 djangorestframework
 numpy
 # netCDF4 1.6.5 gives an HDF5 error when installing and so should be avoided
